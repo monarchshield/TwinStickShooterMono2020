@@ -66,10 +66,10 @@ namespace ShootyGame
             /* This update code will handle collision */
             if (m_alive)
             {
-                CheckCollision(EnemyList);
-                
+                CheckDeath();
 
-                m_killtimer -= deltatime;
+
+                 m_killtimer -= deltatime;
                 m_currentposition -= m_direction * m_speed * deltatime;
                 if(m_killtimer <= 0)
                 {
@@ -96,7 +96,7 @@ namespace ShootyGame
                 
                 if(Lengthproduct < 25)
                 {
-                    badguy.isAlive = false;
+                    badguy.m_alive = false;
                     m_alive = false;
                     m_collision = true;
                 }

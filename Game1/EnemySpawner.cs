@@ -74,7 +74,7 @@ namespace ShootyGame
 
             for (int i = 0; i < m_enemylist.Count; i++)
             {
-                if (m_enemylist[i].isAlive)
+                if (m_enemylist[i].m_alive)
                 {
                     m_enemylist[i].Update(_deltatime);
                 }

@@ -23,7 +23,7 @@ namespace ShootyGame
         Color Colours;
 
         public bool Collision;
-        public bool isAlive;
+        public bool m_alive;
 
 
         float m_dt;
@@ -38,15 +38,19 @@ namespace ShootyGame
             m_texture = texture;
             m_currentposition = position;
             Collision = false;
-            isAlive = true;
+            m_alive = true;
             SetObjectTag("enemy");
         }
 
         public void Update(float _deltaTime)
         {
 
-            if (isAlive)
+            if (m_alive)
             {
+                CheckDeath();
+
+
+
                 float range = (m_currentposition - m_headingPosition).Length();
                 m_dt = _deltaTime;
 
@@ -73,13 +77,19 @@ namespace ShootyGame
         }
 
 
-   
+        public void CheckDeath()
+        {
+            if (GetCollision())
+            {
+                m_alive = false;
+            }
+        }
 
         public void Draw(SpriteBatch spritebatch)
         {
             spritebatch.Begin();
 
-            if (isAlive)
+            if (m_alive)
             {
                 spritebatch.Draw(m_texture, new Rectangle((int)m_currentposition.X, (int)m_currentposition.Y, m_texture.Width, m_texture.Height), Colours);
             }
@@ -106,7 +116,7 @@ namespace ShootyGame
         }
 
       
-        public Rectangle GetDimensions() { return m_texture.Bounds; }
+       
 
 
     }

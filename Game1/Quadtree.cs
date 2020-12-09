@@ -74,13 +74,16 @@ namespace ShootyGame
             int subWidth = (int)(bounds.Width / 2);
             int subHeight = (int)(bounds.Height / 2);
 
+            int overlapsubWidth = (int)(bounds.Width / 10);
+            int overlapsubHeight = (int)(bounds.Height / 10);
+
             int x = bounds.X;
             int y = bounds.Y;
 
-            nodes[0] = new QuadTree(level + 1, new Rectangle(x + subWidth, y, subWidth, subHeight));
-            nodes[1] = new QuadTree(level + 1, new Rectangle(x, y, subWidth, subHeight));
-            nodes[2] = new QuadTree(level + 1, new Rectangle(x, y + subHeight, subWidth, subHeight));
-            nodes[3] = new QuadTree(level + 1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight));
+            nodes[0] = new QuadTree(level + 1, new Rectangle(x + subWidth - overlapsubWidth, y, subWidth + overlapsubWidth, subHeight+overlapsubHeight));
+            nodes[1] = new QuadTree(level + 1, new Rectangle(x, y, subWidth + overlapsubWidth, subHeight + overlapsubHeight));
+            nodes[2] = new QuadTree(level + 1, new Rectangle(x, y + subHeight - overlapsubHeight, subWidth + overlapsubWidth, subHeight +overlapsubHeight));
+            nodes[3] = new QuadTree(level + 1, new Rectangle(x + subWidth - overlapsubWidth, y + subHeight - overlapsubHeight, subWidth + overlapsubWidth, subHeight +overlapsubHeight));
         }
 
         public int getIndex(Pawn pRect)
