@@ -24,9 +24,11 @@ namespace ShootyGame
         private List<QuadTree> QuadList;
        
 
-
-        private Player m_player; 
         
+        private Player m_player;
+        private Camera m_camera;
+
+
         public Texture2D m_enemytexture;
         public Texture2D m_playertexture;
         public Texture2D m_bulletTexture;
@@ -65,8 +67,12 @@ namespace ShootyGame
             m_totalobjects = new List<Pawn>();
             ReturnObjects = new List<Pawn>();
 
+            
 
             m_player = new Player(m_playertexture, m_bulletTexture, m_cursorTexture, new Vector2(50, 50), 5);
+            m_camera = new Camera(GraphicsDevice.Viewport, m_player);
+            
+            
             m_enemyspawner = new EnemySpawner(m_enemytexture, new Vector2(200, 200), 1.0f);
             m_enemyspawner.SpawnEnemy();
 
@@ -122,6 +128,8 @@ namespace ShootyGame
 
             //This is just added to allow for numerical data collection
             quadtreecollision = 0;
+
+            
 
             #region ClearQuadtree to allow for updates
             QuadList.Clear();
@@ -197,6 +205,7 @@ namespace ShootyGame
             #endregion
 
             m_player.Update(gameTime);
+            m_camera.UpdateCamera(GraphicsDevice.Viewport);
             m_enemyspawner.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Update(gameTime);
@@ -207,20 +216,23 @@ namespace ShootyGame
             GraphicsDevice.Clear(Color.Black);
 
 
-            m_enemyspawner.Draw(_spriteBatch);
-            m_player.Draw(_spriteBatch);
+            //m_enemyspawner.Draw(_spriteBatch);
+           // m_player.Draw(_spriteBatch);
 
             quadtree.Childrenof(quadtree, QuadList);
-           
+
+
+        
             foreach (QuadTree kid in QuadList)
             {
                 if (kid != null)
                 {
-                    kid.Draw(_spriteBatch);
+                    kid.Draw(_spriteBatch, m_camera.Transform);
                 }
             }
             
-      
+
+
 
             _spriteBatch.Begin();
             _spriteBatch.DrawString(font, "Bullet dir normalised:" + m_player.m_bulletdirection.ToString(), new Vector2(0, 0), Color.White);
@@ -229,14 +241,20 @@ namespace ShootyGame
             _spriteBatch.DrawString(font, "Enemies currently:" + m_enemyspawner.GetEnemies().Count.ToString(), new Vector2(0, 60), Color.White);
             _spriteBatch.DrawString(font, "Player score:" + m_player.GetPlayerScore().ToString(), new Vector2(0, 80), Color.White);
             _spriteBatch.DrawString(font, "Pawns:" + m_totalobjects.Count.ToString(), new Vector2(0, 100), Color.White);
-
-
-
             _spriteBatch.End();
 
-            m_enemyspawner.Draw(_spriteBatch);
-            m_player.Draw(_spriteBatch);
+            m_player.Draw(_spriteBatch, m_camera.Transform);
 
+
+
+            _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, m_camera.Transform);
+            m_enemyspawner.Draw(_spriteBatch);
+             _spriteBatch.End();
+
+            //m_enemyspawner.Draw(_spriteBatch);
+           // m_player.Draw(_spriteBatch);
+
+            /*
             foreach (QuadTree kid in QuadList)
             {
                 if (kid != null)
@@ -244,6 +262,7 @@ namespace ShootyGame
                     kid.Draw(_spriteBatch);
                 }
             }
+            */
 
             quadtree.Draw(_spriteBatch);
 

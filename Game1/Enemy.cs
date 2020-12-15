@@ -87,14 +87,14 @@ namespace ShootyGame
 
         public void Draw(SpriteBatch spritebatch)
         {
-            spritebatch.Begin();
+            //spritebatch.Begin();
 
             if (m_alive)
             {
                 spritebatch.Draw(m_texture, new Rectangle((int)m_currentposition.X, (int)m_currentposition.Y, m_texture.Width, m_texture.Height), Colours);
             }
 
-            spritebatch.End();
+           // spritebatch.End();
         }
 
         public void Seek(Vector2 TargetPos)

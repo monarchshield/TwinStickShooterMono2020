@@ -224,8 +224,23 @@ namespace ShootyGame
                     //  case 4: RectangleSprite.DrawRectangle(spritebatch, bounds, Color.Purple, 5); break;
             }
 
+            spritebatch.End();
+
+        }
+
+        public void Draw(SpriteBatch spritebatch, Matrix CameraMatrix)
+        {
+            spritebatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, CameraMatrix);
 
 
+            switch (level)
+            {
+                case 0: RectangleSprite.DrawRectangle(spritebatch, bounds, Color.Red, 5); break;
+                case 1: RectangleSprite.DrawRectangle(spritebatch, bounds, Color.Blue, 5); break;
+                case 2: RectangleSprite.DrawRectangle(spritebatch, bounds, Color.LimeGreen, 5); break;
+                case 3: RectangleSprite.DrawRectangle(spritebatch, bounds, Color.Orange, 5); break;
+                    //  case 4: RectangleSprite.DrawRectangle(spritebatch, bounds, Color.Purple, 5); break;
+            }
 
             spritebatch.End();
 
@@ -233,8 +248,12 @@ namespace ShootyGame
 
     }
 
-    class RectangleSprite
-    {
+}
+
+
+
+class RectangleSprite
+{
         static Texture2D _pointTexture;
         public static void DrawRectangle(SpriteBatch spritebatch, Rectangle rectangle, Color color, int lineWidth)
         {
@@ -250,5 +269,4 @@ namespace ShootyGame
             spritebatch.Draw(_pointTexture, new Rectangle(rectangle.X, rectangle.Y + rectangle.Height, rectangle.Width + lineWidth, lineWidth), color);
         }
 
-    }
 }

@@ -112,7 +112,7 @@ namespace ShootyGame
 
         public void Draw(SpriteBatch spritebatch)
         {
-            spritebatch.Begin();
+            //spritebatch.Begin();
 
          
             //spritebatch.Draw(m_spaceshipTexture, new Rectangle((int)m_currentposition.X, (int)m_currentposition.Y, 50, 50), Color.White);
@@ -125,8 +125,30 @@ namespace ShootyGame
           
 
             spritebatch.Draw(m_spaceshipTexture, m_currentposition, null, Color.White, m_playerrotation + 90, new Vector2(m_spaceshipTexture.Width / 2, m_spaceshipTexture.Height / 2), .5f, SpriteEffects.None, 0);
+            spritebatch.End();
+
+            spritebatch.Begin();
             spritebatch.Draw(m_cursorpointer, new Rectangle((int)mousestate.Position.X-25, (int)mousestate.Position.Y-25, 50, 50), Color.White);
-         
+            spritebatch.End();
+        }
+
+        public void Draw(SpriteBatch spritebatch, Matrix CameraMatrix)
+        {
+            spritebatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, CameraMatrix);
+               
+            foreach (Bullet bulletobj in m_bullets)
+            {
+                bulletobj.Draw(spritebatch);
+            }
+
+
+
+
+            spritebatch.Draw(m_spaceshipTexture, m_currentposition, null, Color.White, m_playerrotation + 90, new Vector2(m_spaceshipTexture.Width / 2, m_spaceshipTexture.Height / 2), .5f, SpriteEffects.None, 0);
+            spritebatch.End();
+
+            spritebatch.Begin();
+                spritebatch.Draw(m_cursorpointer, new Rectangle((int)mousestate.Position.X - 25, (int)mousestate.Position.Y - 25, 50, 50), Color.White);
             spritebatch.End();
         }
 
