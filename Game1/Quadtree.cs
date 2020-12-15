@@ -178,6 +178,8 @@ namespace ShootyGame
                 }
             }
 
+          
+
 
             //TODO: Retrieve all the objects within the quad its found;
 

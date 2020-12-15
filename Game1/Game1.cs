@@ -120,65 +120,84 @@ namespace ShootyGame
             m_totalobjects.AddRange(m_enemyspawner.GetEnemies());
             m_totalobjects.AddRange(m_player.GetBullets());
 
-
+            //This is just added to allow for numerical data collection
             quadtreecollision = 0;
 
+            #region ClearQuadtree to allow for updates
             QuadList.Clear();
             quadtree.clear();
+            #endregion
 
+            #region Assign Objects to Quadtree
             for (int i = 0; i < m_totalobjects.Count; i++)
             {
                 quadtree.insert(m_totalobjects[i]);
                 //Go through all the objects and insert them into there proper quadform
             }
+            #endregion
 
-            for (int i = 0; i < m_totalobjects.Count; i++)
+
+            //If more then 5 objects instantiate
+            #region Quadtree instantiation
+            if (m_totalobjects.Count >= 5)
             {
-                ReturnObjects.Clear();
-                quadtree.retrieve(ReturnObjects, m_totalobjects[i]);
-
-                for (int x = 0; x < ReturnObjects.Count; x++)
+                for (int i = 0; i < m_totalobjects.Count; i++)
                 {
-                    for (int j = 0; j < ReturnObjects.Count; j++)
+                    ReturnObjects.Clear();
+                    quadtree.retrieve(ReturnObjects, m_totalobjects[i]);
+
+                    for (int x = 0; x < ReturnObjects.Count; x++)
                     {
-                        if (x == j)
+                        for (int j = 0; j < ReturnObjects.Count; j++)
+                        {
+                            if (x == j)
+                            {
+                                break;
+                            }
+
+                            Distance = (ReturnObjects[x].GetPosition() - ReturnObjects[j].GetPosition()).Length();
+
+                            if (Distance < 50 && ReturnObjects[x].GetobjectTag() != ReturnObjects[j].GetobjectTag())
+                            {
+                                ReturnObjects[x].SetCollision(true);
+                                ReturnObjects[j].SetCollision(true);
+                            }
+
+                        }
+
+                        //Run Collision etection algorithmn between objects here
+                    }
+                }
+            }
+            #endregion
+
+            //This is for if the quadtree hasnt be instantiated yet, 
+            #region RawCollisionDetection
+            else
+            {
+                for (int i = 0; i < m_totalobjects.Count; i++)
+                {
+                    for (int j = 0; j < m_totalobjects.Count; j++)
+                    {
+                        if (i == j)
                         {
                             break;
                         }
 
-                        Distance = (ReturnObjects[x].GetPosition() - ReturnObjects[j].GetPosition()).Length();
+                        Distance = (m_totalobjects[i].GetPosition() - m_totalobjects[j].GetPosition()).Length();
 
-                        if (Distance < 50 && ReturnObjects[x].GetobjectTag() != ReturnObjects[j].GetobjectTag())
+                        if (Distance < 50 && m_totalobjects[i].GetobjectTag() != m_totalobjects[j].GetobjectTag())
                         {
-                            ReturnObjects[x].SetCollision(true);
-                            ReturnObjects[j].SetCollision(true);
+                            m_totalobjects[i].SetCollision(true);
+                            m_totalobjects[j].SetCollision(true);
                         }
-
                     }
-
-                    //Run Collision etection algorithmn between objects here
                 }
-
             }
+            #endregion
 
             m_player.Update(gameTime);
             m_enemyspawner.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-
-           /*
-            for (int i = 0; i < m_enemies.Count; i++)
-            {
-                if (m_enemies[i].isAlive)
-                {
-                    m_enemies[i].Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-                }
-
-                else
-                {
-                    m_enemies.RemoveAt(i);
-                }
-            }
-           */
-
 
             base.Update(gameTime);
         }
