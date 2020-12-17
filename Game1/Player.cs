@@ -28,6 +28,8 @@ namespace ShootyGame
         private Texture2D m_bulletTexture; //The bullet texture
         private Texture2D m_cursorpointer; //The texture for where the cursor is
 
+        private Matrix m_CameraMatrix; //For storing the camera matrix
+
 
         private int m_playerscore;
 
@@ -62,8 +64,9 @@ namespace ShootyGame
             m_shootcooldown = .25f;
             m_currentshootcooldown = 0f;
 
+            m_CameraMatrix = new Matrix();
             
-
+    
         }
 
 
@@ -83,7 +86,16 @@ namespace ShootyGame
 
             keyboardstate = Keyboard.GetState();
             mousestate = Mouse.GetState();
-            m_playerdirection = new Vector2(mousestate.Position.X - m_currentposition.X, mousestate.Position.Y - m_currentposition.Y);
+
+
+
+            Vector2 Position = new Vector2(mousestate.Position.X, mousestate.Position.Y);
+           
+            Vector2 TruePosition = Vector2.Transform(Position, Matrix.Invert(m_CameraMatrix));
+
+
+
+            m_playerdirection = new Vector2(TruePosition.X - m_currentposition.X, TruePosition.Y - m_currentposition.Y);
             m_playerrotation = (float)Math.Atan2(m_playerdirection.Y, m_playerdirection.X);
 
             for (int i = 0; i < m_bullets.Count; i++)
@@ -134,27 +146,42 @@ namespace ShootyGame
 
         public void Draw(SpriteBatch spritebatch, Matrix CameraMatrix)
         {
+
+            m_CameraMatrix = CameraMatrix;
             spritebatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, CameraMatrix);
                
             foreach (Bullet bulletobj in m_bullets)
             {
                 bulletobj.Draw(spritebatch);
             }
+            
 
+            Vector2 Position = new Vector2(mousestate.Position.X, mousestate.Position.Y);
+            Matrix InvertedMatrix = Matrix.Invert(m_CameraMatrix);
+            Vector2 TruePosition = Vector2.Transform(Position, InvertedMatrix);
+           
 
-
+            
 
             spritebatch.Draw(m_spaceshipTexture, m_currentposition, null, Color.White, m_playerrotation + 90, new Vector2(m_spaceshipTexture.Width / 2, m_spaceshipTexture.Height / 2), .5f, SpriteEffects.None, 0);
+            spritebatch.Draw(m_cursorpointer, new Rectangle((int)TruePosition.X - 25, (int)TruePosition.Y - 25, 50, 50), Color.White);
             spritebatch.End();
 
             spritebatch.Begin();
-                spritebatch.Draw(m_cursorpointer, new Rectangle((int)mousestate.Position.X - 25, (int)mousestate.Position.Y - 25, 50, 50), Color.White);
+
+            m_CameraMatrix = CameraMatrix;
+            //  spritebatch.Draw(m_cursorpointer, new Rectangle((int)mousestate.Position.X - 25, (int)mousestate.Position.Y - 25, 50, 50), Color.White);
             spritebatch.End();
         }
 
         public void Shoot(float gametime)
         {
-            m_bulletdirection = m_currentposition - new Vector2(mousestate.Position.X, mousestate.Position.Y);
+
+
+            Vector2 Position = new Vector2(mousestate.Position.X, mousestate.Position.Y);
+            Vector2 TruePosition = Vector2.Transform(Position, Matrix.Invert(m_CameraMatrix));
+
+            m_bulletdirection = m_currentposition - TruePosition;
             m_bulletdirection.Normalize();
             if (mousestate.LeftButton == ButtonState.Pressed && m_currentshootcooldown <= 0)
             {

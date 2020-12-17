@@ -27,7 +27,11 @@ namespace ShootyGame
         
         private Player m_player;
         private Camera m_camera;
+     
 
+        public Texture2D m_background;
+        public Texture2D m_bordertexture;
+        private Border m_border;
 
         public Texture2D m_enemytexture;
         public Texture2D m_playertexture;
@@ -67,7 +71,7 @@ namespace ShootyGame
             m_totalobjects = new List<Pawn>();
             ReturnObjects = new List<Pawn>();
 
-            
+            m_border = new Border(m_bordertexture);
 
             m_player = new Player(m_playertexture, m_bulletTexture, m_cursorTexture, new Vector2(50, 50), 5);
             m_camera = new Camera(GraphicsDevice.Viewport, m_player);
@@ -111,6 +115,9 @@ namespace ShootyGame
             m_bulletTexture = Content.Load<Texture2D>("Bullet");
             m_playertexture = Content.Load<Texture2D>("Killme");
             m_cursorTexture = Content.Load<Texture2D>("Cursorposition");
+
+            m_background = Content.Load<Texture2D>("Background");
+            m_bordertexture = Content.Load<Texture2D>("Border");
             // TODO: use this.Content to load your game content here
         }
 
@@ -215,6 +222,13 @@ namespace ShootyGame
         {
             GraphicsDevice.Clear(Color.Black);
 
+            _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, m_camera.Transform);
+
+            _spriteBatch.Draw(m_background, new Rectangle(0, 0, m_background.Width, m_background.Height), Color.White);
+            m_border.Draw(_spriteBatch);
+
+            _spriteBatch.End();
+
 
             //m_enemyspawner.Draw(_spriteBatch);
            // m_player.Draw(_spriteBatch);
@@ -248,6 +262,8 @@ namespace ShootyGame
 
 
             _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, m_camera.Transform);
+           
+            
             m_enemyspawner.Draw(_spriteBatch);
              _spriteBatch.End();
 

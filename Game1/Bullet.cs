@@ -112,5 +112,18 @@ namespace ShootyGame
                 spriteBatch.Draw(m_texture, new Rectangle((int)m_currentposition.X, (int)m_currentposition.Y, m_texture.Width, m_texture.Height), Color.Red);
             }
         }
+
+        public void Draw(SpriteBatch spriteBatch, Matrix CamMatrix)
+        {
+            if (m_alive)
+            {
+
+               
+               
+
+                //This is the texture being drawn 
+                spriteBatch.Draw(m_texture, new Rectangle((int)m_currentposition.X, (int)m_currentposition.Y, m_texture.Width, m_texture.Height), Color.Red);
+            }
+        }
     }
 }
