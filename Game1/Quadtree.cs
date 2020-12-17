@@ -14,10 +14,10 @@ namespace ShootyGame
     class QuadTree
     {
         //Max amount of objects something can hold before it splits
-        const int MAX_OBJECTS = 5;
+        const int MAX_OBJECTS = 8;
 
         //Deepest level subnode
-        const int MAX_LEVELS = 3;
+        const int MAX_LEVELS = 4;
 
         private int level;
         public List<Pawn> objects;
@@ -221,7 +221,7 @@ namespace ShootyGame
                 case 1: RectangleSprite.DrawRectangle(spritebatch, bounds, Color.Blue, 5); break;
                 case 2: RectangleSprite.DrawRectangle(spritebatch, bounds, Color.LimeGreen, 5); break;
                 case 3: RectangleSprite.DrawRectangle(spritebatch, bounds, Color.Orange, 5); break;
-                    //  case 4: RectangleSprite.DrawRectangle(spritebatch, bounds, Color.Purple, 5); break;
+                case 4: RectangleSprite.DrawRectangle(spritebatch, bounds, Color.Purple, 5); break;
             }
 
             spritebatch.End();
@@ -239,7 +239,7 @@ namespace ShootyGame
                 case 1: RectangleSprite.DrawRectangle(spritebatch, bounds, Color.Blue, 5); break;
                 case 2: RectangleSprite.DrawRectangle(spritebatch, bounds, Color.LimeGreen, 5); break;
                 case 3: RectangleSprite.DrawRectangle(spritebatch, bounds, Color.Orange, 5); break;
-                    //  case 4: RectangleSprite.DrawRectangle(spritebatch, bounds, Color.Purple, 5); break;
+                case 4: RectangleSprite.DrawRectangle(spritebatch, bounds, Color.Purple, 5); break;
             }
 
             spritebatch.End();

@@ -59,7 +59,7 @@ namespace ShootyGame
             m_texture = texture;
             m_spawnfrequency = SpawnFrequency;
             m_currentspawncooldown = 0.0f;
-            m_maxenemies = 29;
+            m_maxenemies = 150;
         }
 
 

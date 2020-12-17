@@ -13,14 +13,14 @@ namespace ShootyGame
     {
 
         float m_deltatime;
-        float m_cooldown;
+      //  float m_cooldown;
 
         private List<Enemy> m_enemies;
         private List<Pawn> m_totalobjects; //For our quadtree
         private List<Pawn> ReturnObjects;
         //Quadtree attributes
         private QuadTree quadtree;
-        private int quadtreecollision;
+        //private int quadtreecollision;
         private List<QuadTree> QuadList;
        
 
@@ -64,19 +64,20 @@ namespace ShootyGame
             _graphics.ApplyChanges();
 
             Distance = 0;
-            quadtree = new QuadTree(0, new Rectangle(0, 0, 794, 490));
+            m_deltatime = 0;
+            quadtree = new QuadTree(0, new Rectangle(0, 0, 3508, 2280));
             QuadList = new List<QuadTree>();
            
             m_enemies = new List<Enemy>();
             m_totalobjects = new List<Pawn>();
             ReturnObjects = new List<Pawn>();
 
-            m_border = new Border(m_bordertexture);
+            
 
-            m_player = new Player(m_playertexture, m_bulletTexture, m_cursorTexture, new Vector2(50, 50), 5);
+            m_player = new Player(m_playertexture, m_bulletTexture, m_cursorTexture, new Vector2(1445, 982), 5);
             m_camera = new Camera(GraphicsDevice.Viewport, m_player);
-            
-            
+            m_border = new Border(m_bordertexture,m_player);
+
             m_enemyspawner = new EnemySpawner(m_enemytexture, new Vector2(200, 200), 1.0f);
             m_enemyspawner.SpawnEnemy();
 
@@ -113,7 +114,7 @@ namespace ShootyGame
             font = Content.Load<SpriteFont>("DefaultFont");
             m_enemytexture = Content.Load<Texture2D>("Entitys");
             m_bulletTexture = Content.Load<Texture2D>("Bullet");
-            m_playertexture = Content.Load<Texture2D>("Killme");
+            m_playertexture = Content.Load<Texture2D>("killme");
             m_cursorTexture = Content.Load<Texture2D>("Cursorposition");
 
             m_background = Content.Load<Texture2D>("Background");
@@ -133,8 +134,10 @@ namespace ShootyGame
             m_totalobjects.AddRange(m_enemyspawner.GetEnemies());
             m_totalobjects.AddRange(m_player.GetBullets());
 
+            m_border.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+
             //This is just added to allow for numerical data collection
-            quadtreecollision = 0;
+           
 
             
 
@@ -280,7 +283,7 @@ namespace ShootyGame
             }
             */
 
-            quadtree.Draw(_spriteBatch);
+            quadtree.Draw(_spriteBatch, m_camera.Transform);
 
 
             base.Draw(gameTime);

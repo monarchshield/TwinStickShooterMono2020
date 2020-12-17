@@ -159,10 +159,10 @@ namespace ShootyGame
             Vector2 Position = new Vector2(mousestate.Position.X, mousestate.Position.Y);
             Matrix InvertedMatrix = Matrix.Invert(m_CameraMatrix);
             Vector2 TruePosition = Vector2.Transform(Position, InvertedMatrix);
-           
 
-            
 
+
+            //spritebatch.Draw(m_spaceshipTexture, m_currentposition, null, Color.Black, 0, new Vector2(m_spaceshipTexture.Width / 2, m_spaceshipTexture.Height / 2), 5f, SpriteEffects.None, 0);
             spritebatch.Draw(m_spaceshipTexture, m_currentposition, null, Color.White, m_playerrotation + 90, new Vector2(m_spaceshipTexture.Width / 2, m_spaceshipTexture.Height / 2), .5f, SpriteEffects.None, 0);
             spritebatch.Draw(m_cursorpointer, new Rectangle((int)TruePosition.X - 25, (int)TruePosition.Y - 25, 50, 50), Color.White);
             spritebatch.End();

@@ -18,7 +18,7 @@ namespace ShootyGame
        
         Vector2 m_direction;
       
-        Player m_playerobject; //Needs a direct reference to the player for collision purposes
+       // Player m_playerobject; //Needs a direct reference to the player for collision purposes
 
         Color Colours;
 
@@ -107,8 +107,8 @@ namespace ShootyGame
 
         Vector2 MakeRandom(Vector2 rand)
         {
-            x = random.Next(0, 800);
-            y = random.Next(0, 500);
+            x = random.Next(330, 3225);
+            y = random.Next(315, 2280);
 
 
             m_headingPosition = new Vector2(x, y);

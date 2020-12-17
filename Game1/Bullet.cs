@@ -18,9 +18,9 @@ namespace ShootyGame
         private Color m_color;
         
         private Vector2 m_direction;
-        private float m_speed;
+     
         public bool m_alive;
-        public bool m_enemycollided; //Used for tracking player points
+       // public bool m_enemycollided; //Used for tracking player points
         float deltatime;
 
         private float m_killtimer;
