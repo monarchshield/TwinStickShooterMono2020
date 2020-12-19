@@ -40,16 +40,15 @@ namespace ShootyGame
             Collision = false;
             m_alive = true;
             SetObjectTag("enemy");
+            MakeRandom(m_headingPosition);
         }
 
-        public void Update(float _deltaTime)
+        public virtual void Update(float _deltaTime)
         {
 
             if (m_alive)
             {
                 CheckDeath();
-
-
 
                 float range = (m_currentposition - m_headingPosition).Length();
                 m_dt = _deltaTime;
@@ -87,14 +86,10 @@ namespace ShootyGame
 
         public void Draw(SpriteBatch spritebatch)
         {
-            //spritebatch.Begin();
-
             if (m_alive)
             {
                 spritebatch.Draw(m_texture, new Rectangle((int)m_currentposition.X, (int)m_currentposition.Y, m_texture.Width, m_texture.Height), Colours);
             }
-
-           // spritebatch.End();
         }
 
         public void Seek(Vector2 TargetPos)

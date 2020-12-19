@@ -77,6 +77,10 @@ namespace ShootyGame
             int overlapsubWidth = (int)(bounds.Width / 10);
             int overlapsubHeight = (int)(bounds.Height / 10);
 
+            //int overlapsubWidth = 0;
+            //int overlapsubHeight = 0;
+
+
             int x = bounds.X;
             int y = bounds.Y;
 

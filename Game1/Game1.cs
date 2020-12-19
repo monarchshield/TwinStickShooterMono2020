@@ -45,7 +45,8 @@ namespace ShootyGame
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private EnemySpawner m_enemyspawner;
+       
+        private List<EnemySpawner> m_enemyspawners;
 
         public Game1()
         {
@@ -71,17 +72,23 @@ namespace ShootyGame
             m_enemies = new List<Enemy>();
             m_totalobjects = new List<Pawn>();
             ReturnObjects = new List<Pawn>();
-
+            
             
 
             m_player = new Player(m_playertexture, m_bulletTexture, m_cursorTexture, new Vector2(1445, 982), 5);
             m_camera = new Camera(GraphicsDevice.Viewport, m_player);
             m_border = new Border(m_bordertexture,m_player);
 
-            m_enemyspawner = new EnemySpawner(m_enemytexture, new Vector2(200, 200), 1.0f);
-            m_enemyspawner.SpawnEnemy();
+          
+            m_enemyspawners = new List<EnemySpawner>();
 
-            m_player.AssignEnemyArray(m_enemyspawner.GetEnemies());
+            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(-5, -35), 1.0f));
+            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(3550, -35), 1.0f));
+            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(3550, 2500), 1.0f));
+            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(-5, 2500), 1.0f));
+
+
+     
 
 
             
@@ -118,7 +125,7 @@ namespace ShootyGame
             m_cursorTexture = Content.Load<Texture2D>("Cursorposition");
 
             m_background = Content.Load<Texture2D>("Background");
-            m_bordertexture = Content.Load<Texture2D>("Border");
+            m_bordertexture = Content.Load<Texture2D>("Border2");
             // TODO: use this.Content to load your game content here
         }
 
@@ -131,7 +138,14 @@ namespace ShootyGame
 
             /* I dont know if this is really terrible but it works for now */
             m_totalobjects.Clear();
-            m_totalobjects.AddRange(m_enemyspawner.GetEnemies());
+
+
+            foreach (EnemySpawner enemyspawner in m_enemyspawners)
+            {
+                m_totalobjects.AddRange(enemyspawner.GetEnemies());
+            }
+
+           
             m_totalobjects.AddRange(m_player.GetBullets());
 
             m_border.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
@@ -216,7 +230,13 @@ namespace ShootyGame
 
             m_player.Update(gameTime);
             m_camera.UpdateCamera(GraphicsDevice.Viewport);
-            m_enemyspawner.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+          
+
+
+            foreach (EnemySpawner enemyspawner in m_enemyspawners)
+            {
+                enemyspawner.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            }
 
             base.Update(gameTime);
         }
@@ -239,7 +259,7 @@ namespace ShootyGame
             quadtree.Childrenof(quadtree, QuadList);
 
 
-        
+        /*
             foreach (QuadTree kid in QuadList)
             {
                 if (kid != null)
@@ -247,7 +267,7 @@ namespace ShootyGame
                     kid.Draw(_spriteBatch, m_camera.Transform);
                 }
             }
-            
+          */  
 
 
 
@@ -255,7 +275,7 @@ namespace ShootyGame
             _spriteBatch.DrawString(font, "Bullet dir normalised:" + m_player.m_bulletdirection.ToString(), new Vector2(0, 0), Color.White);
             _spriteBatch.DrawString(font, "Player position:" + m_player.m_currentposition.ToString(), new Vector2(0, 20), Color.White);
             _spriteBatch.DrawString(font, "Bullets currently:" + m_player.GetBullets().Count.ToString(), new Vector2(0, 40), Color.White);
-            _spriteBatch.DrawString(font, "Enemies currently:" + m_enemyspawner.GetEnemies().Count.ToString(), new Vector2(0, 60), Color.White);
+           
             _spriteBatch.DrawString(font, "Player score:" + m_player.GetPlayerScore().ToString(), new Vector2(0, 80), Color.White);
             _spriteBatch.DrawString(font, "Pawns:" + m_totalobjects.Count.ToString(), new Vector2(0, 100), Color.White);
             _spriteBatch.End();
@@ -265,9 +285,14 @@ namespace ShootyGame
 
 
             _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, m_camera.Transform);
+
+            foreach (EnemySpawner enemyspawner in m_enemyspawners)
+            {
+                enemyspawner.Draw(_spriteBatch);
+            }
+
+
            
-            
-            m_enemyspawner.Draw(_spriteBatch);
              _spriteBatch.End();
 
             //m_enemyspawner.Draw(_spriteBatch);
@@ -283,7 +308,7 @@ namespace ShootyGame
             }
             */
 
-            quadtree.Draw(_spriteBatch, m_camera.Transform);
+           // quadtree.Draw(_spriteBatch, m_camera.Transform);
 
 
             base.Draw(gameTime);

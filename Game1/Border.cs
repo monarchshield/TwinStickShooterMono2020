@@ -69,16 +69,16 @@ namespace ShootyGame
                     m_Color = Color.Lerp(Color.Red, Color.Orange, m_colourtimestamp);
                     break;
                 case 2:
-                    m_Color = Color.Lerp(Color.Orange, Color.LightGoldenrodYellow, m_colourtimestamp);
+                    m_Color = Color.Lerp(Color.Orange, Color.Yellow, m_colourtimestamp);
                     break;
                 case 3:
-                    m_Color = Color.Lerp(Color.LightGoldenrodYellow, Color.LimeGreen, m_colourtimestamp);
+                    m_Color = Color.Lerp(Color.Yellow, Color.Green, m_colourtimestamp);
                     break;
                 case 4:
-                    m_Color = Color.Lerp(Color.LimeGreen, Color.SkyBlue, m_colourtimestamp);
+                    m_Color = Color.Lerp(Color.Green, Color.Blue, m_colourtimestamp);
                     break;
                 case 5:
-                    m_Color = Color.Lerp(Color.SkyBlue, Color.HotPink, m_colourtimestamp);
+                    m_Color = Color.Lerp(Color.Blue, Color.HotPink, m_colourtimestamp);
                     break;
                 case 6:
                     m_Color = Color.Lerp(Color.HotPink, Color.MediumPurple, m_colourtimestamp);
