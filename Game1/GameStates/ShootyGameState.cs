@@ -57,11 +57,7 @@ namespace ShootyGame
         }
         public override void Initialize()
         {
-            // TODO: Add your initialization logic here
-           // LoadContent();
-
-            
-
+          
             //_graphics.PreferredBackBufferWidth = 795;
             //_graphics.PreferredBackBufferHeight = 495;
             //_graphics.ApplyChanges();
@@ -113,6 +109,12 @@ namespace ShootyGame
 
         public override void UnloadContent()
         {
+            m_enemytexture.Dispose();
+            m_bulletTexture.Dispose();
+            m_playertexture.Dispose();
+            m_cursorTexture.Dispose();
+            m_background.Dispose();
+            m_bordertexture.Dispose();
         }
 
         public override void Update(GameTime gameTime)

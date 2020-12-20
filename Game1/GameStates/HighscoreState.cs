@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ShootyGame
 {
-    public class TestGameState : GameState
+    public class HighscoreState : GameState
     {
         float timepassed;
 
@@ -15,7 +15,7 @@ namespace ShootyGame
         Color m_color;
 
 
-        public TestGameState(GraphicsDevice graphicsDevice)
+        public HighscoreState(GraphicsDevice graphicsDevice)
         : base(graphicsDevice)
         {
             m_graphics = graphicsDevice;
@@ -28,8 +28,6 @@ namespace ShootyGame
 
         public override void LoadContent(ContentManager content)
         {
-
-
         }
 
         public override void UnloadContent()
@@ -38,20 +36,7 @@ namespace ShootyGame
 
         public override void Update(GameTime gameTime)
         {
-
-            timepassed += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if(timepassed > 3)
-            {
-                m_color = Color.SkyBlue;
-                
-            }
-
-
-            if(timepassed > 6)
-            {
-                GameStateManager.Instance.ChangeScreen(new TestGameState(m_graphics));
-            }
+ 
         }
 
         public override void Draw(SpriteBatch spriteBatch)

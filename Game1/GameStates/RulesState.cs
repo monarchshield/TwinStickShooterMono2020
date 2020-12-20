@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ShootyGame
 {
-    public class TestGameState : GameState
+    public class RulesState : GameState
     {
         float timepassed;
 
@@ -15,7 +15,7 @@ namespace ShootyGame
         Color m_color;
 
 
-        public TestGameState(GraphicsDevice graphicsDevice)
+        public RulesState(GraphicsDevice graphicsDevice)
         : base(graphicsDevice)
         {
             m_graphics = graphicsDevice;
@@ -28,8 +28,6 @@ namespace ShootyGame
 
         public override void LoadContent(ContentManager content)
         {
-
-
         }
 
         public override void UnloadContent()

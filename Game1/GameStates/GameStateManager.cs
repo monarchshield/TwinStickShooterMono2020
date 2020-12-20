@@ -116,7 +116,7 @@ namespace ShootyGame
             }
             catch (Exception ex)
             {
-               // throw new ArgumentException(ex.ToString());
+                throw new ArgumentException(ex.ToString());
             }
         }
 
