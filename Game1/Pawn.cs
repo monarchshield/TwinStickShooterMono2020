@@ -13,7 +13,7 @@ namespace ShootyGame
         protected bool m_collision;
         protected Texture2D m_texture;
         protected string m_objectTag;
-
+        protected SpriteFont m_sprintfont;
 
         public Pawn()
         {

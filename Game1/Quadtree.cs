@@ -17,7 +17,7 @@ namespace ShootyGame
         const int MAX_OBJECTS = 8;
 
         //Deepest level subnode
-        const int MAX_LEVELS = 4;
+        const int MAX_LEVELS = 3;
 
         private int level;
         public List<Pawn> objects;
@@ -76,9 +76,10 @@ namespace ShootyGame
 
             int overlapsubWidth = (int)(bounds.Width / 10);
             int overlapsubHeight = (int)(bounds.Height / 10);
-
             //int overlapsubWidth = 0;
             //int overlapsubHeight = 0;
+
+
 
 
             int x = bounds.X;
@@ -94,8 +95,12 @@ namespace ShootyGame
         {
             index = -1;
 
+           
+
             double verticalMidpoint = bounds.X + (bounds.Width / 2);
             double horizontalMidpoint = bounds.Y + (bounds.Height / 2);
+
+            
 
             //Object can completly fit within the top quandrants
             Boolean topQuandrant = (pRect.GetPosition().Y <= horizontalMidpoint && pRect.GetPosition().Y + pRect.GetDimensions().Height <= horizontalMidpoint);
@@ -133,12 +138,12 @@ namespace ShootyGame
             {
                 index = getIndex(pRect);
 
-                if (index != -1)
-                {
+                //if (index != -1)
+                //{
 
                     nodes[index].objects.Add(pRect);
                     return;
-                }
+                //}
             }
 
             objects.Add(pRect);

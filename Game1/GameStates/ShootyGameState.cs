@@ -77,6 +77,7 @@ namespace ShootyGame
             m_camera = new Camera(GetViewport, m_player);
             m_border = new Border(m_bordertexture, m_player);
 
+            m_player.SetFont(font);
 
             m_enemyspawners = new List<EnemySpawner>();
 
@@ -97,8 +98,8 @@ namespace ShootyGame
         public override void LoadContent(ContentManager Content)
         {
             font = Content.Load<SpriteFont>("DefaultFont");
-            m_enemytexture = Content.Load<Texture2D>("Entitys");
-            m_bulletTexture = Content.Load<Texture2D>("Bullet");
+            m_enemytexture = Content.Load<Texture2D>("Meteor");
+            m_bulletTexture = Content.Load<Texture2D>("BulletAnimated");
             m_playertexture = Content.Load<Texture2D>("killme");
             m_cursorTexture = Content.Load<Texture2D>("Cursorposition");
 
@@ -119,8 +120,17 @@ namespace ShootyGame
 
         public override void Update(GameTime gameTime)
         {
-           
+
             // TODO: Add your update logic here
+
+            m_player.Update(gameTime);
+            m_camera.UpdateCamera(GetViewport);
+
+
+            foreach (EnemySpawner enemyspawner in m_enemyspawners)
+            {
+                enemyspawner.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            }
 
             /* I dont know if this is really terrible but it works for now */
             m_totalobjects.Clear();
@@ -168,17 +178,19 @@ namespace ShootyGame
                     {
                         for (int j = 0; j < ReturnObjects.Count; j++)
                         {
-                            if (x == j)
-                            {
-                                break;
-                            }
 
-                            Distance = (ReturnObjects[x].GetPosition() - ReturnObjects[j].GetPosition()).Length();
+                           
 
-                            if (Distance < 50 && ReturnObjects[x].GetobjectTag() != ReturnObjects[j].GetobjectTag())
+                            if(ReturnObjects[x].GetobjectTag().Equals("bullet"));
                             {
-                                ReturnObjects[x].SetCollision(true);
-                                ReturnObjects[j].SetCollision(true);
+
+                                Distance = (ReturnObjects[x].GetPosition() - ReturnObjects[j].GetPosition()).Length();
+
+                                if (Distance < 64 && !ReturnObjects[x].GetobjectTag().Equals(ReturnObjects[j].GetobjectTag()))
+                                {
+                                    ReturnObjects[x].SetCollision(true);
+                                    ReturnObjects[j].SetCollision(true);
+                                }
                             }
 
                         }
@@ -197,10 +209,6 @@ namespace ShootyGame
                 {
                     for (int j = 0; j < m_totalobjects.Count; j++)
                     {
-                        if (i == j)
-                        {
-                            break;
-                        }
 
                         Distance = (m_totalobjects[i].GetPosition() - m_totalobjects[j].GetPosition()).Length();
 
@@ -214,15 +222,7 @@ namespace ShootyGame
             }
             #endregion
 
-            m_player.Update(gameTime);
-            m_camera.UpdateCamera(GetViewport);
-
-
-
-            foreach (EnemySpawner enemyspawner in m_enemyspawners)
-            {
-                enemyspawner.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-            }
+        
 
             
 
@@ -245,15 +245,15 @@ namespace ShootyGame
             quadtree.Childrenof(quadtree, QuadList);
 
 
-            /*
+            
                 foreach (QuadTree kid in QuadList)
                 {
                     if (kid != null)
                     {
-                        kid.Draw(_spriteBatch, m_camera.Transform);
+                        kid.Draw(spriteBatch, m_camera.Transform);
                     }
                 }
-              */
+             
 
 
 
@@ -264,6 +264,7 @@ namespace ShootyGame
 
             spriteBatch.DrawString(font, "Player score:" + m_player.GetPlayerScore().ToString(), new Vector2(0, 80), Color.White);
             spriteBatch.DrawString(font, "Pawns:" + m_totalobjects.Count.ToString(), new Vector2(0, 100), Color.White);
+            spriteBatch.DrawString(font, "Player rotation:" + m_player.m_playerrotation.ToString(), new Vector2(0, 120), Color.White);
             spriteBatch.End();
 
             m_player.Draw(spriteBatch, m_camera.Transform);
@@ -275,6 +276,11 @@ namespace ShootyGame
             foreach (EnemySpawner enemyspawner in m_enemyspawners)
             {
                 enemyspawner.Draw(spriteBatch);
+               
+                //For debug purposes
+                enemyspawner.DrawInfo(spriteBatch, font);
+                
+
             }
 
 
@@ -284,6 +290,7 @@ namespace ShootyGame
             //m_enemyspawner.Draw(_spriteBatch);
             // m_player.Draw(_spriteBatch);
 
+            
             /*
             foreach (QuadTree kid in QuadList)
             {
@@ -292,9 +299,9 @@ namespace ShootyGame
                     kid.Draw(_spriteBatch);
                 }
             }
-            */
+            */            
 
-            // quadtree.Draw(_spriteBatch, m_camera.Transform);
+             quadtree.Draw(spriteBatch, m_camera.Transform);
 
         }
     }

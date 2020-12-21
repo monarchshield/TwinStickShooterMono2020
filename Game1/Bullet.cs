@@ -24,6 +24,14 @@ namespace ShootyGame
         float deltatime;
 
         private float m_killtimer;
+       
+        private float m_animationtimer;
+        private int m_currentframe;
+
+        private float m_rotation;
+
+        
+        private Rectangle animationRectangle;
 
 
         public Bullet()
@@ -40,7 +48,7 @@ namespace ShootyGame
 
         }
 
-        public Bullet(Texture2D texture, Vector2 Position, Vector2 Direction)
+        public Bullet(Texture2D texture, Vector2 Position, Vector2 Direction,float playerrot)
         {
 
             /* Primary overload constructor dont @ me */
@@ -53,6 +61,12 @@ namespace ShootyGame
             m_killtimer = 5;
             m_speed = 300;
             SetObjectTag("bullet");
+           
+            m_currentframe = 1;
+            m_animationtimer = 0;
+
+            m_rotation = playerrot;
+            
 
 
         }
@@ -63,10 +77,18 @@ namespace ShootyGame
 
             deltatime = (float)_deltatime.ElapsedGameTime.TotalSeconds;
 
+            m_animationtimer += deltatime;
+
+
+
+
+
             /* This update code will handle collision */
             if (m_alive)
             {
-                CheckDeath();
+                
+                UpdateAnimation(.25f);
+            
 
 
                  m_killtimer -= deltatime;
@@ -76,6 +98,24 @@ namespace ShootyGame
                     m_alive = false;
                 }
 
+            }
+            CheckDeath();
+        }
+
+
+        public void UpdateAnimation(float animtime)
+        {
+            if (m_animationtimer > animtime)
+            {
+                m_animationtimer = 0;
+                m_currentframe += 1;
+
+                if (m_currentframe > 2)
+                {
+                    m_currentframe = 0;
+                }
+
+                
             }
         }
 
@@ -94,7 +134,7 @@ namespace ShootyGame
             {
                 float Lengthproduct = (badguy.GetPosition() - m_currentposition).Length();
                 
-                if(Lengthproduct < 25)
+                if(Lengthproduct < 64)
                 {
                     badguy.m_alive = false;
                     m_alive = false;
@@ -108,8 +148,8 @@ namespace ShootyGame
 
             if (m_alive)
             {
-                //This is the texture being drawn 
-                spriteBatch.Draw(m_texture, new Rectangle((int)m_currentposition.X, (int)m_currentposition.Y, m_texture.Width, m_texture.Height), Color.Red);
+                //This is the texture being drawn  
+                spriteBatch.Draw(m_texture, new Rectangle((int)m_currentposition.X, (int)m_currentposition.Y, 128, m_texture.Height), new Rectangle(128 * m_currentframe, 0, 128, 128), Color.White, m_rotation + 90, new Vector2(64,64), SpriteEffects.None, 0);
             }
         }
 
@@ -117,13 +157,15 @@ namespace ShootyGame
         {
             if (m_alive)
             {
-
-               
-               
-
                 //This is the texture being drawn 
-                spriteBatch.Draw(m_texture, new Rectangle((int)m_currentposition.X, (int)m_currentposition.Y, m_texture.Width, m_texture.Height), Color.Red);
+                spriteBatch.Draw(m_texture, new Rectangle((int)m_currentposition.X, (int)m_currentposition.Y, m_texture.Width, m_texture.Height), new Rectangle(0,0,128,128),Color.White,m_rotation,Vector2.Zero, SpriteEffects.None, 0);
             }
+        }
+
+
+        public void DrawInfo(SpriteBatch spritebatch, SpriteFont spritefont)
+        {
+            spritebatch.DrawString(spritefont, m_currentposition.ToString(), new Vector2(m_currentposition.X, m_currentposition.Y - 30), Color.White);
         }
     }
 }

@@ -25,6 +25,12 @@ namespace ShootyGame
         public bool Collision;
         public bool m_alive;
 
+        private float m_animationtimer;
+        private int m_currentframe;
+
+
+        Vector2 m_enemydirRotation;
+        private float m_rotation;
 
         float m_dt;
         float x;
@@ -41,6 +47,12 @@ namespace ShootyGame
             m_alive = true;
             SetObjectTag("enemy");
             MakeRandom(m_headingPosition);
+
+
+            m_rotation = (float)Math.Atan2(m_direction.Y, m_direction.X);
+            //m_rotation -= .25f;
+          
+
         }
 
         public virtual void Update(float _deltaTime)
@@ -48,7 +60,10 @@ namespace ShootyGame
 
             if (m_alive)
             {
+
+                m_animationtimer += _deltaTime;
                 CheckDeath();
+                UpdateAnimation(.10f);
 
                 float range = (m_currentposition - m_headingPosition).Length();
                 m_dt = _deltaTime;
@@ -75,6 +90,21 @@ namespace ShootyGame
 
         }
 
+        public void UpdateAnimation(float animtime)
+        {
+            if (m_animationtimer > animtime)
+            {
+                m_animationtimer = 0;
+                m_currentframe += 1;
+
+                if (m_currentframe > 2)
+                {
+                    m_currentframe = 0;
+                }
+
+
+            }
+        }
 
         public void CheckDeath()
         {
@@ -88,8 +118,14 @@ namespace ShootyGame
         {
             if (m_alive)
             {
-                spritebatch.Draw(m_texture, new Rectangle((int)m_currentposition.X, (int)m_currentposition.Y, m_texture.Width, m_texture.Height), Colours);
+                spritebatch.Draw(m_texture, new Rectangle((int)m_currentposition.X, (int)m_currentposition.Y, 128, m_texture.Height), new Rectangle(128 * m_currentframe, 0, 128, 128), Color.White, m_rotation, new Vector2(64, 64), SpriteEffects.None, 0);
+
             }
+        }
+
+        public void DrawInfo(SpriteBatch spritebatch, SpriteFont spritefont)
+        {
+            spritebatch.DrawString(spritefont, m_currentposition.ToString(), new Vector2(m_currentposition.X, m_currentposition.Y - 30), Color.White);
         }
 
         public void Seek(Vector2 TargetPos)
@@ -107,6 +143,9 @@ namespace ShootyGame
 
 
             m_headingPosition = new Vector2(x, y);
+            m_rotation = (float)Math.Atan2(m_currentposition.Y - m_headingPosition.Y, m_currentposition.X - m_headingPosition.X);
+           
+       
             return rand;
         }
 

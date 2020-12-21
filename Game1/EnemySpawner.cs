@@ -59,7 +59,7 @@ namespace ShootyGame
             m_texture = texture;
             m_spawnfrequency = SpawnFrequency;
             m_currentspawncooldown = 0.0f;
-            m_maxenemies = 25;
+            m_maxenemies = 4;
         }
 
 
@@ -94,7 +94,25 @@ namespace ShootyGame
         {
             for (int i = 0; i < m_enemylist.Count; i++)
             {
-                m_enemylist[i].Draw(spritebatch);
+                if(m_enemylist[i].m_alive)
+                {
+                    m_enemylist[i].Draw(spritebatch);
+
+                }
+               
+            }
+        }
+
+        public void DrawInfo(SpriteBatch spritebatch, SpriteFont font)
+        {
+            for (int i = 0; i < m_enemylist.Count; i++)
+            {
+                if (m_enemylist[i].m_alive)
+                {
+                    m_enemylist[i].DrawInfo(spritebatch,font);
+
+                }
+
             }
         }
 

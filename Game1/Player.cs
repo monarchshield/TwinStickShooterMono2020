@@ -18,7 +18,7 @@ namespace ShootyGame
         private Vector2 m_velocity; //the players movement direction
         private float m_speed; //The players base speed
         private Vector2 m_playerdirection; //This is for where the player is facing
-        private float m_playerrotation; //This is the rotation the player is facing towards.
+        public float m_playerrotation; //This is the rotation the player is facing towards.
         
         private float m_shootcooldown; //After the cooldown has gone of reset to this value
         private float m_currentshootcooldown; //This stops the bullets from being spammed 
@@ -45,7 +45,7 @@ namespace ShootyGame
         private Color m_color; //Colour of whatever
         private int m_lives; //The lives a player has 
 
-        
+        private SpriteFont m_debugfont; //for debug purposes
 
 
         public Player() { }
@@ -69,7 +69,10 @@ namespace ShootyGame
     
         }
 
-
+        public void SetFont(SpriteFont font)
+        {
+            m_debugfont = font;
+        }
 
         public void AssignEnemyArray(List<Enemy> EnemyList)
         {
@@ -97,6 +100,7 @@ namespace ShootyGame
 
             m_playerdirection = new Vector2(TruePosition.X - m_currentposition.X, TruePosition.Y - m_currentposition.Y);
             m_playerrotation = (float)Math.Atan2(m_playerdirection.Y, m_playerdirection.X);
+            m_playerrotation -= .45f;
 
             for (int i = 0; i < m_bullets.Count; i++)
             {
@@ -107,20 +111,25 @@ namespace ShootyGame
                 
                 else
                 {
-                    if(m_bullets[i].GetCollision()) { m_playerscore += 10; }
+                    if(!m_bullets[i].m_alive) { m_playerscore += 10; }
                     m_bullets.RemoveAt(i);
                 }
             }
 
+            /*
             foreach (Bullet bulletobj in m_bullets)
             {
                 bulletobj.Update(gameTime, m_enemies);
             }
+            */
 
 
 
          
         }
+
+
+       
 
         public void Draw(SpriteBatch spritebatch)
         {
@@ -136,7 +145,7 @@ namespace ShootyGame
 
           
 
-            spritebatch.Draw(m_spaceshipTexture, m_currentposition, null, Color.White, m_playerrotation + 90, new Vector2(m_spaceshipTexture.Width / 2, m_spaceshipTexture.Height / 2), .5f, SpriteEffects.None, 0);
+            spritebatch.Draw(m_spaceshipTexture, m_currentposition, null, Color.White, m_playerrotation , new Vector2(m_spaceshipTexture.Width / 2, m_spaceshipTexture.Height / 2), .5f, SpriteEffects.None, 0);
             spritebatch.End();
 
             spritebatch.Begin();
@@ -153,6 +162,7 @@ namespace ShootyGame
             foreach (Bullet bulletobj in m_bullets)
             {
                 bulletobj.Draw(spritebatch);
+                bulletobj.DrawInfo(spritebatch, m_debugfont);
             }
             
 
@@ -183,11 +193,12 @@ namespace ShootyGame
 
             m_bulletdirection = m_currentposition - TruePosition;
             m_bulletdirection.Normalize();
+
             if (mousestate.LeftButton == ButtonState.Pressed && m_currentshootcooldown <= 0)
             {
                
 
-                m_bullets.Add(new Bullet(m_bulletTexture, m_currentposition, m_bulletdirection));
+                m_bullets.Add(new Bullet(m_bulletTexture, m_currentposition, m_bulletdirection,m_playerrotation));
                 m_currentshootcooldown = m_shootcooldown;
                 
 

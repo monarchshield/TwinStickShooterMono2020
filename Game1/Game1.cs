@@ -30,11 +30,17 @@ namespace ShootyGame
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+
+            ///<Summary>
+            ///To add more content to the game you just type mgcb-editor in command prompt * *
+            ///</Summary>
             GameStateManager.Instance.SetContent(Content);
 
 
-            GameStateManager.Instance.AddScreen(new TestGameState(GraphicsDevice));
-            //GameStateManager.Instance.AddScreen(new ShootyGameState(GraphicsDevice));
+            //GameStateManager.Instance.AddScreen(new MainMenuState(GraphicsDevice));
+            GameStateManager.Instance.AddScreen(new ShootyGameState(GraphicsDevice));
+
 
 
 
