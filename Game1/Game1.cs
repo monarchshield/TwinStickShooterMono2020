@@ -17,12 +17,18 @@ namespace ShootyGame
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
+           
+            
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
 
         protected override void Initialize()
         {
+
+            _graphics.PreferredBackBufferWidth = 800;  // set this value to the desired width of your window
+            _graphics.PreferredBackBufferHeight = 480;   // set this value to the desired height of your window
+            _graphics.ApplyChanges();
 
             base.Initialize();
         }
@@ -31,6 +37,8 @@ namespace ShootyGame
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            
+
 
             ///<Summary>
             ///To add more content to the game you just type mgcb-editor in command prompt * *
@@ -38,8 +46,8 @@ namespace ShootyGame
             GameStateManager.Instance.SetContent(Content);
 
 
-            //GameStateManager.Instance.AddScreen(new MainMenuState(GraphicsDevice));
-            GameStateManager.Instance.AddScreen(new ShootyGameState(GraphicsDevice));
+            GameStateManager.Instance.AddScreen(new MainMenuState(GraphicsDevice));
+            //GameStateManager.Instance.AddScreen(new ShootyGameState(GraphicsDevice));
 
 
 

@@ -58,10 +58,6 @@ namespace ShootyGame
         public override void Initialize()
         {
           
-            //_graphics.PreferredBackBufferWidth = 795;
-            //_graphics.PreferredBackBufferHeight = 495;
-            //_graphics.ApplyChanges();
-
             Distance = 0;
             m_deltatime = 0;
             quadtree = new QuadTree(0, new Rectangle(0, 0, 3508, 2280));
@@ -142,7 +138,7 @@ namespace ShootyGame
             }
 
 
-            m_totalobjects.AddRange(m_player.GetBullets());
+            m_totalobjects.AddRange(m_player.m_bullets);
 
             m_border.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
@@ -176,24 +172,19 @@ namespace ShootyGame
 
                     for (int x = 0; x < ReturnObjects.Count; x++)
                     {
-                        for (int j = 0; j < ReturnObjects.Count; j++)
+
+                        if (m_totalobjects[i].GetobjectTag().Equals("bullet"))
                         {
+                            Distance = (m_totalobjects[i].GetPosition() - ReturnObjects[x].GetPosition()).Length();
 
-                           
-
-                            if(ReturnObjects[x].GetobjectTag().Equals("bullet"));
+                            if (Distance < 64 && !m_totalobjects[i].GetobjectTag().Equals(ReturnObjects[x].GetobjectTag()))
                             {
-
-                                Distance = (ReturnObjects[x].GetPosition() - ReturnObjects[j].GetPosition()).Length();
-
-                                if (Distance < 64 && !ReturnObjects[x].GetobjectTag().Equals(ReturnObjects[j].GetobjectTag()))
-                                {
-                                    ReturnObjects[x].SetCollision(true);
-                                    ReturnObjects[j].SetCollision(true);
-                                }
+                                m_totalobjects[i].SetCollision(true);
+                                ReturnObjects[x].SetCollision(true);
                             }
+                        }  
 
-                        }
+                        
 
                         //Run Collision etection algorithmn between objects here
                     }

@@ -38,6 +38,8 @@ namespace ShootyGame
             m_position = Position;
             m_navigation = loc;
             m_color = Color.White;
+            CollisionPoint = new Point(10, 10);
+            CollisionRect = new Rectangle((int)m_position.X, (int)m_position.Y, m_texture.Width, m_texture.Height);
         }
 
         public MenuButton(Texture2D texture, Vector2 Position, MenuNav loc, GraphicsDevice graphicsDevice)
@@ -47,6 +49,8 @@ namespace ShootyGame
             m_navigation = loc;
             m_color = Color.White;
             m_graphics = graphicsDevice;
+            CollisionPoint = new Point(1, 1);
+            CollisionRect = new Rectangle((int)m_position.X, (int)m_position.Y, m_texture.Width, m_texture.Height);
         }
 
 

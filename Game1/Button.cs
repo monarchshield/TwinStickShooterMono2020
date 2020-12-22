@@ -13,8 +13,8 @@ namespace ShootyGame
         protected bool m_collision;
         protected Texture2D m_texture;
         protected MouseState mousestate;
-        private Rectangle CollisionRect;
-        private Point CollisionPoint;
+        protected Rectangle CollisionRect;
+        protected Point CollisionPoint;
         
         
         protected Color m_color;
@@ -25,13 +25,13 @@ namespace ShootyGame
             m_texture = texture;
             m_position = Position;
             CollisionPoint = new Point(10, 10);
-            CollisionRect = new Rectangle((int)m_position.X, (int)m_position.Y, m_texture.Height, m_texture.Width);
+            CollisionRect = new Rectangle((int)m_position.X, (int)m_position.Y, m_texture.Width, m_texture.Height);
             m_color = Color.White;
         }
 
         public bool IsColliding()
         {
-            //mousestate.Position
+            mousestate = Mouse.GetState();
 
             if (CollisionRect.Intersects(new Rectangle(mousestate.Position,CollisionPoint)))
             {
@@ -55,9 +55,9 @@ namespace ShootyGame
 
         public virtual void Draw(SpriteBatch spritebatch)
         {
-            spritebatch.Begin();
-                spritebatch.Draw(m_texture, new Rectangle((int)mousestate.Position.X - (m_texture.Width/2), (int)m_position.Y - (m_texture.Height/2), m_texture.Height, m_texture.Width ), m_color);
-            spritebatch.End();
+            
+            spritebatch.Draw(m_texture, new Rectangle((int)m_position.X, (int)m_position.Y, m_texture.Width, m_texture.Height ), m_color);
+          
         }
 
     }

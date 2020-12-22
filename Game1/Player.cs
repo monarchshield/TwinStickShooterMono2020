@@ -38,7 +38,7 @@ namespace ShootyGame
 
         private List<Enemy> m_enemies;
 
-        private List<Bullet> m_bullets; //The bullets the player has shot
+        public List<Bullet> m_bullets; //The bullets the player has shot
         public Vector2 m_bulletdirection;
 
         private Vector2 m_mouseposition; //The current mouse position

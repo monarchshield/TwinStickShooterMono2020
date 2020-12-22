@@ -14,7 +14,7 @@ namespace ShootyGame
     class QuadTree
     {
         //Max amount of objects something can hold before it splits
-        const int MAX_OBJECTS = 8;
+        const int MAX_OBJECTS = 5;
 
         //Deepest level subnode
         const int MAX_LEVELS = 3;
@@ -74,11 +74,11 @@ namespace ShootyGame
             int subWidth = (int)(bounds.Width / 2);
             int subHeight = (int)(bounds.Height / 2);
 
-            int overlapsubWidth = (int)(bounds.Width / 10);
-            int overlapsubHeight = (int)(bounds.Height / 10);
-            //int overlapsubWidth = 0;
-            //int overlapsubHeight = 0;
-
+            
+            int overlapsubWidth = 0;
+            int overlapsubHeight = 0;
+            //int overlapsubWidth = (int)(subWidth / 10);
+            //int overlapsubHeight = (int)(subHeight / 10);
 
 
 
@@ -99,17 +99,17 @@ namespace ShootyGame
 
             double verticalMidpoint = bounds.X + (bounds.Width / 2);
             double horizontalMidpoint = bounds.Y + (bounds.Height / 2);
+         
 
-            
 
             //Object can completly fit within the top quandrants
-            Boolean topQuandrant = (pRect.GetPosition().Y <= horizontalMidpoint && pRect.GetPosition().Y + pRect.GetDimensions().Height <= horizontalMidpoint);
+            Boolean topQuandrant = (pRect.GetPosition().Y <= horizontalMidpoint && pRect.GetPosition().Y <= horizontalMidpoint);
 
             //Object can completly fit within the bottom quandrants
             Boolean bottomQuadrant = (pRect.GetPosition().Y >= horizontalMidpoint);
 
             //Object can completly fit within the left quandrants
-            if (pRect.GetPosition().X <= verticalMidpoint && pRect.GetPosition().X + pRect.GetDimensions().Width <= verticalMidpoint)
+            if (pRect.GetPosition().X <= verticalMidpoint && pRect.GetPosition().X <= verticalMidpoint)
             {
                 if (topQuandrant)
                     index = 1;
@@ -138,12 +138,12 @@ namespace ShootyGame
             {
                 index = getIndex(pRect);
 
-                //if (index != -1)
-                //{
+                if (index != -1)
+                {
 
                     nodes[index].objects.Add(pRect);
                     return;
-                //}
+                }
             }
 
             objects.Add(pRect);
@@ -192,7 +192,7 @@ namespace ShootyGame
 
             //TODO: Retrieve all the objects within the quad its found;
 
-            // returnObjects.Add(pRect);
+            returnObjects.Add(pRect);
 
 
             return returnObjects;
