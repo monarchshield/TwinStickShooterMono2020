@@ -17,6 +17,9 @@ namespace ShootyGame
         private List<Enemy> m_enemies;
         private List<Pawn> m_totalobjects; //For our quadtree
         private List<Pawn> ReturnObjects;
+
+        private List<DeathParticle> m_deathparticles;
+
         //Quadtree attributes
         private QuadTree quadtree;
         //private int quadtreecollision;
@@ -32,10 +35,13 @@ namespace ShootyGame
         public Texture2D m_bordertexture;
         private Border m_border;
 
+
+        public Texture2D m_deathparticletexture;
         public Texture2D m_enemytexture;
         public Texture2D m_playertexture;
         public Texture2D m_bulletTexture;
         public Texture2D m_cursorTexture;
+        public Texture2D m_lifeTexture;
         public SpriteFont font;
 
         public float Distance;
@@ -67,9 +73,10 @@ namespace ShootyGame
             m_totalobjects = new List<Pawn>();
             ReturnObjects = new List<Pawn>();
 
+            m_deathparticles = new List<DeathParticle>();
             
 
-            m_player = new Player(m_playertexture, m_bulletTexture, m_cursorTexture, new Vector2(1445, 982), 5);
+            m_player = new Player(m_playertexture, m_bulletTexture, m_cursorTexture,m_lifeTexture, new Vector2(1445, 982), 5);
             m_camera = new Camera(GetViewport, m_player);
             m_border = new Border(m_bordertexture, m_player);
 
@@ -98,10 +105,11 @@ namespace ShootyGame
             m_bulletTexture = Content.Load<Texture2D>("BulletAnimated");
             m_playertexture = Content.Load<Texture2D>("killme");
             m_cursorTexture = Content.Load<Texture2D>("Cursorposition");
+            m_lifeTexture = Content.Load<Texture2D>("Life");
 
             m_background = Content.Load<Texture2D>("Background");
             m_bordertexture = Content.Load<Texture2D>("Border2");
-
+            m_deathparticletexture = Content.Load<Texture2D>("Explosion");
         }
 
         public override void UnloadContent()
@@ -122,6 +130,15 @@ namespace ShootyGame
             m_player.Update(gameTime);
             m_camera.UpdateCamera(GetViewport);
 
+            
+
+            for (int i = 0; i < m_deathparticles.Count; i++)
+            {
+                m_deathparticles[i].Update(gameTime);
+
+                if (!m_deathparticles[i].isAlive()) { m_deathparticles.RemoveAt(i); }
+            }
+
 
             foreach (EnemySpawner enemyspawner in m_enemyspawners)
             {
@@ -130,6 +147,8 @@ namespace ShootyGame
 
             /* I dont know if this is really terrible but it works for now */
             m_totalobjects.Clear();
+
+            m_totalobjects.Add(m_player);
 
 
             foreach (EnemySpawner enemyspawner in m_enemyspawners)
@@ -175,16 +194,31 @@ namespace ShootyGame
 
                         if (m_totalobjects[i].GetobjectTag().Equals("bullet"))
                         {
+                            if(i==x) { break; }
                             Distance = (m_totalobjects[i].GetPosition() - ReturnObjects[x].GetPosition()).Length();
 
-                            if (Distance < 64 && !m_totalobjects[i].GetobjectTag().Equals(ReturnObjects[x].GetobjectTag()))
+                           
+                            if (Distance < 64 &&  string.Equals(ReturnObjects[x].GetobjectTag(), "enemy"))
                             {
+
+                                m_deathparticles.Add(new DeathParticle(m_deathparticletexture, ReturnObjects[x].GetPosition()));
                                 m_totalobjects[i].SetCollision(true);
                                 ReturnObjects[x].SetCollision(true);
                             }
-                        }  
 
-                        
+                        }
+
+                        else if (string.Equals(m_totalobjects[i].GetobjectTag(), "player"))
+                        {
+                            Distance = (m_totalobjects[i].GetPosition() - ReturnObjects[x].GetPosition()).Length();
+                            if (Distance < 64 && string.Equals(ReturnObjects[x].GetobjectTag(), "enemy"))
+                            {
+                                m_deathparticles.Add(new DeathParticle(m_deathparticletexture, ReturnObjects[x].GetPosition()));
+                                m_player.LoseLife();
+                                ReturnObjects[x].SetCollision(true);
+                               
+                            }
+                        }
 
                         //Run Collision etection algorithmn between objects here
                     }
@@ -203,20 +237,38 @@ namespace ShootyGame
 
                         Distance = (m_totalobjects[i].GetPosition() - m_totalobjects[j].GetPosition()).Length();
 
-                        if (Distance < 50 && m_totalobjects[i].GetobjectTag() != m_totalobjects[j].GetobjectTag())
+                        if (m_totalobjects[i].GetobjectTag().Equals("bullet"))
                         {
-                            m_totalobjects[i].SetCollision(true);
-                            m_totalobjects[j].SetCollision(true);
+                            if (i == j) { break; }
+                            Distance = (m_totalobjects[i].GetPosition() - ReturnObjects[j].GetPosition()).Length();
+
+
+                            if (Distance < 64 && string.Equals(ReturnObjects[j].GetobjectTag(), "enemy"))
+                            {
+
+                                m_deathparticles.Add(new DeathParticle(m_deathparticletexture, ReturnObjects[j].GetPosition()));
+                                m_totalobjects[i].SetCollision(true);
+                                ReturnObjects[j].SetCollision(true);
+                            }
+
+                        }
+
+                        else if (string.Equals(m_totalobjects[i].GetobjectTag(), "player"))
+                        {
+                            Distance = (m_totalobjects[i].GetPosition() - ReturnObjects[j].GetPosition()).Length();
+                            if (Distance < 64 && string.Equals(ReturnObjects[j].GetobjectTag(), "enemy"))
+                            {
+                                m_deathparticles.Add(new DeathParticle(m_deathparticletexture, ReturnObjects[j].GetPosition()));
+                                m_player.LoseLife();
+                                ReturnObjects[j].SetCollision(true);
+
+                            }
                         }
                     }
                 }
+                #endregion
+
             }
-            #endregion
-
-        
-
-            
-
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -226,6 +278,8 @@ namespace ShootyGame
 
             spriteBatch.Draw(m_background, new Rectangle(0, 0, m_background.Width, m_background.Height), Color.White);
             m_border.Draw(spriteBatch);
+
+          
 
             spriteBatch.End();
 
@@ -249,13 +303,13 @@ namespace ShootyGame
 
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, "Bullet dir normalised:" + m_player.m_bulletdirection.ToString(), new Vector2(0, 0), Color.White);
-            spriteBatch.DrawString(font, "Player position:" + m_player.m_currentposition.ToString(), new Vector2(0, 20), Color.White);
+            /*spriteBatch.DrawString(font, "Bullet dir normalised:" + m_player.m_bulletdirection.ToString(), new Vector2(0, 0), Color.White);
+            spriteBatch.DrawString(font, "Player position:" + m_player.GetPosition().ToString(), new Vector2(0, 20), Color.White);
             spriteBatch.DrawString(font, "Bullets currently:" + m_player.GetBullets().Count.ToString(), new Vector2(0, 40), Color.White);
 
             spriteBatch.DrawString(font, "Player score:" + m_player.GetPlayerScore().ToString(), new Vector2(0, 80), Color.White);
             spriteBatch.DrawString(font, "Pawns:" + m_totalobjects.Count.ToString(), new Vector2(0, 100), Color.White);
-            spriteBatch.DrawString(font, "Player rotation:" + m_player.m_playerrotation.ToString(), new Vector2(0, 120), Color.White);
+            spriteBatch.DrawString(font, "Player rotation:" + m_player.m_playerrotation.ToString(), new Vector2(0, 120), Color.White); */
             spriteBatch.End();
 
             m_player.Draw(spriteBatch, m_camera.Transform);
@@ -272,6 +326,11 @@ namespace ShootyGame
                 enemyspawner.DrawInfo(spriteBatch, font);
                 
 
+            }
+
+            foreach (DeathParticle deathparticle in m_deathparticles)
+            {
+                deathparticle.Draw(spriteBatch);
             }
 
 

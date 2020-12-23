@@ -8,7 +8,7 @@ namespace ShootyGame
 {
     class Pawn
     {
-        protected Vector2 m_currentposition;
+        public Vector2 m_currentposition;
         protected float m_speed;
         protected bool m_collision;
         protected Texture2D m_texture;

@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Linq;
 
 namespace ShootyGame
 {
@@ -16,8 +17,8 @@ namespace ShootyGame
     class HighscoreFile
     {
 
-        XmlDocument HighscoreDocument;
-        List<PlayerScore> m_playerScores;
+        private XmlDocument HighscoreDocument;
+        public List<PlayerScore> m_playerScores;
         
         public HighscoreFile() 
         {
@@ -25,10 +26,17 @@ namespace ShootyGame
             m_playerScores = new List<PlayerScore>();
             
             CreateDefaultDocument();
-            WritetoFile(45, "Wtf?");
-            WritetoFile(90, "Wohoo!");
+           
             ReadFile();
         }
+
+
+        public void SortHighScores()
+        {
+            m_playerScores = m_playerScores.OrderByDescending(PlayerScore => PlayerScore.scorevalue).ToList();
+          
+        }
+
 
 
         public void CreateDefaultDocument()

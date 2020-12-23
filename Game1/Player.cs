@@ -11,22 +11,27 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ShootyGame
 {
-    class Player
+    class Player : Pawn
     {
 
-        public Vector2 m_currentposition; //The current position of the player
+       
         private Vector2 m_velocity; //the players movement direction
-        private float m_speed; //The players base speed
+       
         private Vector2 m_playerdirection; //This is for where the player is facing
         public float m_playerrotation; //This is the rotation the player is facing towards.
         
         private float m_shootcooldown; //After the cooldown has gone of reset to this value
         private float m_currentshootcooldown; //This stops the bullets from being spammed 
+        
+        private float m_immunityframes;
+        private float m_immunity;
 
 
         private Texture2D m_spaceshipTexture; //The texture of the ship
         private Texture2D m_bulletTexture; //The bullet texture
         private Texture2D m_cursorpointer; //The texture for where the cursor is
+        private Texture2D m_playerlifeUI;
+
 
         private Matrix m_CameraMatrix; //For storing the camera matrix
 
@@ -43,17 +48,18 @@ namespace ShootyGame
 
         private Vector2 m_mouseposition; //The current mouse position
         private Color m_color; //Colour of whatever
-        private int m_lives; //The lives a player has 
+        public int m_lives; //The lives a player has 
 
         private SpriteFont m_debugfont; //for debug purposes
 
 
         public Player() { }
-        public Player(Texture2D playertexture, Texture2D bulletTexture, Texture2D Cursortexture,  Vector2 position, int lives)
+        public Player(Texture2D playertexture, Texture2D bulletTexture, Texture2D Cursortexture, Texture2D lifetexture, Vector2 position, int lives)
         {
             m_spaceshipTexture = playertexture;
             m_bulletTexture = bulletTexture;
             m_cursorpointer = Cursortexture;
+            m_playerlifeUI = lifetexture;
 
             m_currentposition = position;
             m_mouseposition = Vector2.Zero;
@@ -65,8 +71,11 @@ namespace ShootyGame
             m_currentshootcooldown = 0f;
 
             m_CameraMatrix = new Matrix();
-            
-    
+            SetObjectTag("player");
+
+            m_immunityframes = 3.0f;
+            m_immunity = 0;
+
         }
 
         public void SetFont(SpriteFont font)
@@ -79,13 +88,23 @@ namespace ShootyGame
             m_enemies = EnemyList;
         }
 
-
+        public void LoseLife()
+        {
+            if(m_immunity < 0)
+            {
+                m_lives -= 1;
+                m_immunity = m_immunityframes;
+            }
+        }
 
         public void Update(GameTime gameTime)
         {
 
             Shoot((float)gameTime.ElapsedGameTime.TotalSeconds);
             Move((float)gameTime.ElapsedGameTime.TotalSeconds);
+
+
+            m_immunity -= (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             keyboardstate = Keyboard.GetState();
             mousestate = Mouse.GetState();
@@ -180,6 +199,12 @@ namespace ShootyGame
             spritebatch.Begin();
 
             m_CameraMatrix = CameraMatrix;
+
+            for (int i = 0; i < m_lives; i++)
+            {
+                spritebatch.Draw(m_playerlifeUI, new Rectangle(10 + i * 50, 10, m_playerlifeUI.Width, m_playerlifeUI.Height), Color.White);
+            }
+
             //  spritebatch.Draw(m_cursorpointer, new Rectangle((int)mousestate.Position.X - 25, (int)mousestate.Position.Y - 25, 50, 50), Color.White);
             spritebatch.End();
         }
@@ -241,10 +266,7 @@ namespace ShootyGame
             m_velocity = Vector2.Zero;
         }
 
-        public void Collision()
-        {
-
-        }
+        
 
        
         public List<Bullet> GetBullets() { return m_bullets; }

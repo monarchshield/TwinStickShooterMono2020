@@ -83,7 +83,7 @@ namespace ShootyGame
         /// 
         public void UpdateCameraPosition()
         {
-            Position = m_playerref.m_currentposition;
+            Position = m_playerref.GetPosition();
         }
 
         public void MoveCamera(Vector2 currentposition)
