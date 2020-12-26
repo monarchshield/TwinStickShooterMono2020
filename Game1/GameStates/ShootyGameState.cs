@@ -89,7 +89,10 @@ namespace ShootyGame
             m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(3550, 2500), 1.0f));
             m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(-5, 2500), 1.0f));
 
-
+            foreach(EnemySpawner enemySpawner in m_enemyspawners)
+            {
+                enemySpawner.SetCameraMatrix(m_camera.Transform);
+            }
 
 
 
@@ -284,8 +287,8 @@ namespace ShootyGame
             spriteBatch.End();
 
 
-            //m_enemyspawner.Draw(_spriteBatch);
-            // m_player.Draw(_spriteBatch);
+ 
+          
 
             quadtree.Childrenof(quadtree, QuadList);
 
@@ -303,13 +306,13 @@ namespace ShootyGame
 
 
             spriteBatch.Begin();
-            /*spriteBatch.DrawString(font, "Bullet dir normalised:" + m_player.m_bulletdirection.ToString(), new Vector2(0, 0), Color.White);
-            spriteBatch.DrawString(font, "Player position:" + m_player.GetPosition().ToString(), new Vector2(0, 20), Color.White);
-            spriteBatch.DrawString(font, "Bullets currently:" + m_player.GetBullets().Count.ToString(), new Vector2(0, 40), Color.White);
+            spriteBatch.DrawString(font, "Bullet dir normalised:" + m_player.m_bulletdirection.ToString(), new Vector2(0, 40), Color.White);
+            spriteBatch.DrawString(font, "Player position:" + m_player.GetPosition().ToString(), new Vector2(0, 60), Color.White);
+            spriteBatch.DrawString(font, "Bullets currently:" + m_player.GetBullets().Count.ToString(), new Vector2(0, 80), Color.White);
 
-            spriteBatch.DrawString(font, "Player score:" + m_player.GetPlayerScore().ToString(), new Vector2(0, 80), Color.White);
-            spriteBatch.DrawString(font, "Pawns:" + m_totalobjects.Count.ToString(), new Vector2(0, 100), Color.White);
-            spriteBatch.DrawString(font, "Player rotation:" + m_player.m_playerrotation.ToString(), new Vector2(0, 120), Color.White); */
+            spriteBatch.DrawString(font, "Player score:" + m_player.GetPlayerScore().ToString(), new Vector2(0, 100), Color.White);
+            spriteBatch.DrawString(font, "Pawns:" + m_totalobjects.Count.ToString(), new Vector2(0, 120), Color.White);
+            spriteBatch.DrawString(font, "Player rotation:" + m_player.m_playerrotation.ToString(), new Vector2(0, 140), Color.White); 
             spriteBatch.End();
 
             m_player.Draw(spriteBatch, m_camera.Transform);

@@ -15,6 +15,8 @@ namespace ShootyGame
         private float m_currentspawncooldown; //Current cooldown for a spawner
         private List<Enemy> m_enemylist; //List of enemies
         private int m_maxenemies; //This is used to control how many enemies can spawn
+        private Matrix m_CameraMatrix;
+
 
         /// <summary>
         /// Default constructor
@@ -62,7 +64,10 @@ namespace ShootyGame
             m_maxenemies = 4;
         }
 
-
+        public void SetCameraMatrix(Matrix cam)
+        {
+            m_CameraMatrix = cam;
+        }
 
         /// <summary>
         /// Main update loop, here we will execute our spawning
@@ -121,7 +126,9 @@ namespace ShootyGame
         /// </summary>
         public void SpawnEnemy()
         {
-            m_enemylist.Add(new Enemy(m_texture, m_spawnerlocation));
+            Enemy NewEnemy = new Enemy(m_texture, m_spawnerlocation);
+            NewEnemy.SetCameraMatrix(m_CameraMatrix);
+            m_enemylist.Add(NewEnemy);
             m_currentspawncooldown = m_spawnfrequency;
         }
 
@@ -139,7 +146,9 @@ namespace ShootyGame
            
             if(m_currentspawncooldown < 0 && m_enemylist.Count <= m_maxenemies)
             {
-                m_enemylist.Add(new Enemy(m_texture, m_spawnerlocation));
+                Enemy NewEnemy = new Enemy(m_texture, m_spawnerlocation);
+                NewEnemy.SetCameraMatrix(m_CameraMatrix);
+                m_enemylist.Add(NewEnemy);
                 m_currentspawncooldown = m_spawnfrequency;
             }
         }

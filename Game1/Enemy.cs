@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,6 +13,8 @@ namespace ShootyGame
 {
     class Enemy : Pawn
     {
+
+     
         static Random random = new Random();
 
         Vector2 m_headingPosition = new Vector2(400, 200);
@@ -29,6 +32,7 @@ namespace ShootyGame
         private int m_currentframe;
 
 
+        private Matrix m_CameraMatrix; //For storing the camera matrix
         Vector2 m_enemydirRotation;
         private float m_rotation;
 
@@ -39,6 +43,7 @@ namespace ShootyGame
 
         public Enemy() { }
 
+        
         public Enemy(Texture2D texture, Vector2 position)
         {
             m_texture = texture;
@@ -49,10 +54,17 @@ namespace ShootyGame
             MakeRandom(m_headingPosition);
 
 
-            m_rotation = (float)Math.Atan2(m_direction.Y, m_direction.X);
-            //m_rotation -= .25f;
-          
 
+            m_rotation = (float)Math.Atan2(m_direction.Y, m_direction.X);
+            m_rotation -= .20f;
+
+
+
+        }
+
+        public void SetCameraMatrix(Matrix cam)
+        {
+            m_CameraMatrix = cam;
         }
 
         public virtual void Update(float _deltaTime)
@@ -118,7 +130,7 @@ namespace ShootyGame
         {
             if (m_alive)
             {
-                spritebatch.Draw(m_texture, new Rectangle((int)m_currentposition.X, (int)m_currentposition.Y, 128, m_texture.Height), new Rectangle(128 * m_currentframe, 0, 128, 128), Color.White, m_rotation, new Vector2(64, 64), SpriteEffects.None, 0);
+                spritebatch.Draw(m_texture, new Rectangle((int)m_currentposition.X, (int)m_currentposition.Y, 128, m_texture.Height), new Rectangle(128 * m_currentframe, 0, 128, 128), Color.White, m_rotation+90, new Vector2(64, 64), SpriteEffects.None, 0);
 
             }
         }
@@ -126,6 +138,7 @@ namespace ShootyGame
         public void DrawInfo(SpriteBatch spritebatch, SpriteFont spritefont)
         {
             spritebatch.DrawString(spritefont, m_currentposition.ToString(), new Vector2(m_currentposition.X, m_currentposition.Y - 30), Color.White);
+            spritebatch.DrawString(spritefont, m_rotation.ToString(), new Vector2(m_currentposition.X, m_currentposition.Y - 50), Color.White);
         }
 
         public void Seek(Vector2 TargetPos)
@@ -133,7 +146,18 @@ namespace ShootyGame
             Vector2 MaxVeloxity = new Vector2(5, 5);									//The Max Velocity Will always be Constant. 
             m_direction = new Vector2(TargetPos.X - m_currentposition.X, TargetPos.Y - m_currentposition.Y);
             m_direction.Normalize();
+
+
+
+            m_rotation = (float)Math.Atan2(m_direction.Y,m_direction.X);
+            m_rotation -= .20f;
+            
+          
+
             m_currentposition += m_direction * 100 * m_dt;
+
+
+            
         }
 
         Vector2 MakeRandom(Vector2 rand)
@@ -141,11 +165,12 @@ namespace ShootyGame
             x = random.Next(330, 3225);
             y = random.Next(315, 2280);
 
-
+            
             m_headingPosition = new Vector2(x, y);
-            m_rotation = (float)Math.Atan2(m_currentposition.Y - m_headingPosition.Y, m_currentposition.X - m_headingPosition.X);
            
-       
+
+             
+
             return rand;
         }
 

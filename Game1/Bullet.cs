@@ -165,6 +165,8 @@ namespace ShootyGame
 
         public void DrawInfo(SpriteBatch spritebatch, SpriteFont spritefont)
         {
+            spritebatch.DrawString(spritefont, m_rotation.ToString(), new Vector2(m_currentposition.X, m_currentposition.Y - 50), Color.White);
+
             spritebatch.DrawString(spritefont, m_currentposition.ToString(), new Vector2(m_currentposition.X, m_currentposition.Y - 30), Color.White);
         }
     }

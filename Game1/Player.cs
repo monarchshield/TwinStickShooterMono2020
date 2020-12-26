@@ -202,7 +202,7 @@ namespace ShootyGame
 
             for (int i = 0; i < m_lives; i++)
             {
-                spritebatch.Draw(m_playerlifeUI, new Rectangle(10 + i * 50, 10, m_playerlifeUI.Width, m_playerlifeUI.Height), Color.White);
+                spritebatch.Draw(m_playerlifeUI, new Rectangle(0 + i * 50, 0, m_playerlifeUI.Width, m_playerlifeUI.Height), Color.White);
             }
 
             //  spritebatch.Draw(m_cursorpointer, new Rectangle((int)mousestate.Position.X - 25, (int)mousestate.Position.Y - 25, 50, 50), Color.White);
