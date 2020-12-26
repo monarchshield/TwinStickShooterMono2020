@@ -28,8 +28,9 @@ namespace ShootyGame
         public bool Collision;
         public bool m_alive;
 
-        private float m_animationtimer;
-        private int m_currentframe;
+        protected float m_animationtimer;
+        protected int m_currentframe;
+        protected int m_animationframes;
 
 
         private Matrix m_CameraMatrix; //For storing the camera matrix
@@ -54,7 +55,7 @@ namespace ShootyGame
             MakeRandom(m_headingPosition);
 
 
-
+            m_animationframes = 2;
             m_rotation = (float)Math.Atan2(m_direction.Y, m_direction.X);
             m_rotation -= .20f;
 
@@ -83,6 +84,8 @@ namespace ShootyGame
                 if (range < 10)
                 {
                     MakeRandom(m_headingPosition);
+
+
                 }
 
                 if (Collision == true)
@@ -109,7 +112,7 @@ namespace ShootyGame
                 m_animationtimer = 0;
                 m_currentframe += 1;
 
-                if (m_currentframe > 2)
+                if (m_currentframe > m_animationframes)
                 {
                     m_currentframe = 0;
                 }
@@ -167,9 +170,10 @@ namespace ShootyGame
 
             
             m_headingPosition = new Vector2(x, y);
-           
 
-             
+            //m_rotation = (float)Math.Atan2(m_headingPosition.Y, m_headingPosition.X);
+            //m_rotation -= .20f;
+
 
             return rand;
         }

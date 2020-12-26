@@ -84,10 +84,10 @@ namespace ShootyGame
 
             m_enemyspawners = new List<EnemySpawner>();
 
-            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(-5, -35), 1.0f));
-            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(3550, -35), 1.0f));
-            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(3550, 2500), 1.0f));
-            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(-5, 2500), 1.0f));
+            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(-5, -35), 1.0f, m_player));
+            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(3550, -35), 1.0f, m_player));
+            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(3550, 2500), 1.0f, m_player));
+            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(-5, 2500), 1.0f, m_player));
 
             foreach(EnemySpawner enemySpawner in m_enemyspawners)
             {

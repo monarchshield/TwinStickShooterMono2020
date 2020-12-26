@@ -22,9 +22,23 @@ namespace ShootyGame
             
         }
 
+        public ChaserEnemy(Texture2D texture, Vector2 Position, Player TargetRef)
+        {
+            m_texture = texture;
+            m_currentposition = Position;
+            Collision = false;
+            SetObjectTag("enemy");
+        }
+
         public override void Update(float _deltaTime)
         {
-
+            if(m_alive)
+            {
+                m_animationtimer += _deltaTime;
+                CheckDeath();
+                UpdateAnimation(.10f);
+                Seek(m_playerref.GetPosition());
+            }
         }
 
         public void SetPlayerRef(Player playerref)

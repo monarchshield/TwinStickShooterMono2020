@@ -16,6 +16,7 @@ namespace ShootyGame
         private List<Enemy> m_enemylist; //List of enemies
         private int m_maxenemies; //This is used to control how many enemies can spawn
         private Matrix m_CameraMatrix;
+        private Player m_player;
 
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace ShootyGame
         /// <summary>
         /// Overload w, Texture, Spawn, Frequency 
         /// </summary>
-        public EnemySpawner(Texture2D texture, Vector2 SpawnerPosition, float SpawnFrequency) 
+        public EnemySpawner(Texture2D texture, Vector2 SpawnerPosition, float SpawnFrequency, Player playerref) 
         {
             m_enemylist = new List<Enemy>();
             m_spawnerlocation = SpawnerPosition;
@@ -62,6 +63,7 @@ namespace ShootyGame
             m_spawnfrequency = SpawnFrequency;
             m_currentspawncooldown = 0.0f;
             m_maxenemies = 4;
+            m_player = playerref;
         }
 
         public void SetCameraMatrix(Matrix cam)
