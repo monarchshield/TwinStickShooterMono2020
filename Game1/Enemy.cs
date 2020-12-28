@@ -31,13 +31,13 @@ namespace ShootyGame
         protected float m_animationtimer;
         protected int m_currentframe;
         protected int m_animationframes;
-
+        protected float m_speed;
 
         private Matrix m_CameraMatrix; //For storing the camera matrix
         Vector2 m_enemydirRotation;
         private float m_rotation;
 
-        float m_dt;
+        protected float m_dt;
         float x;
         float y;
 
@@ -58,7 +58,7 @@ namespace ShootyGame
             m_animationframes = 2;
             m_rotation = (float)Math.Atan2(m_direction.Y, m_direction.X);
             m_rotation -= .20f;
-
+            m_speed = 250;
 
 
         }
@@ -157,7 +157,7 @@ namespace ShootyGame
             
           
 
-            m_currentposition += m_direction * 100 * m_dt;
+            m_currentposition += m_direction * m_speed * m_dt;
 
 
             

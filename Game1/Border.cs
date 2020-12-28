@@ -37,7 +37,7 @@ namespace ShootyGame
 
         }
 
-        public void Update(float gametime)
+        public virtual void Update(float gametime)
         {
             ChangeColours(gametime);
             PlayInboundary();
@@ -99,7 +99,7 @@ namespace ShootyGame
             //m_Color = Color.Lerp(Color.White, Color.Red, 30);
         }
 
-        public void Draw(SpriteBatch spritebatch)
+        public virtual void Draw(SpriteBatch spritebatch)
         {
            
             spritebatch.Draw(m_texture, new Rectangle((int)m_currentposition.X, (int)m_currentposition.Y, m_texture.Width, m_texture.Height), m_Color);

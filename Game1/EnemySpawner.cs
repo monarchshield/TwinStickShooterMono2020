@@ -11,6 +11,7 @@ namespace ShootyGame
     {
         private Vector2 m_spawnerlocation; //Where is the spawner located on the map
         private Texture2D m_texture; //This is the texture used for enemies
+        private Texture2D m_chasertexture;
         private float m_spawnfrequency; ///How often does the spawner create a entity 
         private float m_currentspawncooldown; //Current cooldown for a spawner
         private List<Enemy> m_enemylist; //List of enemies
@@ -40,14 +41,14 @@ namespace ShootyGame
         /// <summary>
         /// Overload w Texture, Spawn
         /// </summary>
-        public EnemySpawner(Texture2D texture, float SpawnFrequency) //Overload w Texture, Spawn
+        public EnemySpawner(Texture2D texture, Texture2D chasertexture, float SpawnFrequency) //Overload w Texture, Spawn
         {
             m_enemylist = new List<Enemy>();
             m_spawnerlocation = new Vector2(0, 0);
             m_texture = texture;
             m_spawnfrequency = SpawnFrequency;
             m_currentspawncooldown = 0.0f;
-            m_maxenemies = 1;
+            m_maxenemies = 0;
         }
 
 
@@ -55,14 +56,15 @@ namespace ShootyGame
         /// <summary>
         /// Overload w, Texture, Spawn, Frequency 
         /// </summary>
-        public EnemySpawner(Texture2D texture, Vector2 SpawnerPosition, float SpawnFrequency, Player playerref) 
+        public EnemySpawner(Texture2D texture, Texture2D chasertexture, Vector2 SpawnerPosition, float SpawnFrequency, Player playerref) 
         {
             m_enemylist = new List<Enemy>();
             m_spawnerlocation = SpawnerPosition;
             m_texture = texture;
+            m_chasertexture = chasertexture;
             m_spawnfrequency = SpawnFrequency;
             m_currentspawncooldown = 0.0f;
-            m_maxenemies = 4;
+            m_maxenemies = 1;
             m_player = playerref;
         }
 
@@ -148,8 +150,12 @@ namespace ShootyGame
            
             if(m_currentspawncooldown < 0 && m_enemylist.Count <= m_maxenemies)
             {
+                //ChaserEnemy NewEnemy = new ChaserEnemy(m_chasertexture, m_spawnerlocation ,m_player);
+                //NewEnemy.SetCameraMatrix(m_CameraMatrix);
+
                 Enemy NewEnemy = new Enemy(m_texture, m_spawnerlocation);
-                NewEnemy.SetCameraMatrix(m_CameraMatrix);
+                //NewEnemy.SetCameraMatrix(m_CameraMatrix);
+
                 m_enemylist.Add(NewEnemy);
                 m_currentspawncooldown = m_spawnfrequency;
             }

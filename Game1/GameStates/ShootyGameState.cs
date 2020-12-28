@@ -34,8 +34,15 @@ namespace ShootyGame
         public Texture2D m_background;
         public Texture2D m_bordertexture;
         private Border m_border;
+        private List<ParallaxBackground> m_parallaxBackgrounds;
+
+        public Texture2D m_parallaxtexture;
+        public Texture2D m_parallaxtexture1;
+        public Texture2D m_parallaxtexture2;
+        public Texture2D m_parallaxtexture3;
 
 
+        public Texture2D m_enemychasertexture;
         public Texture2D m_deathparticletexture;
         public Texture2D m_enemytexture;
         public Texture2D m_playertexture;
@@ -74,20 +81,25 @@ namespace ShootyGame
             ReturnObjects = new List<Pawn>();
 
             m_deathparticles = new List<DeathParticle>();
-            
+          
 
             m_player = new Player(m_playertexture, m_bulletTexture, m_cursorTexture,m_lifeTexture, new Vector2(1445, 982), 5);
             m_camera = new Camera(GetViewport, m_player);
             m_border = new Border(m_bordertexture, m_player);
 
+            m_parallaxBackgrounds = new List<ParallaxBackground>();
+            m_parallaxBackgrounds.Add(new ParallaxBackground(m_parallaxtexture1, new Vector2(100, 100), .50f, m_player));
+            m_parallaxBackgrounds.Add(new ParallaxBackground(m_parallaxtexture2, new Vector2(200, 200), .50f, m_player));
+            m_parallaxBackgrounds.Add(new ParallaxBackground(m_parallaxtexture3, new Vector2(400, 400), .50f, m_player));
+
             m_player.SetFont(font);
 
             m_enemyspawners = new List<EnemySpawner>();
 
-            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(-5, -35), 1.0f, m_player));
-            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(3550, -35), 1.0f, m_player));
-            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(3550, 2500), 1.0f, m_player));
-            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, new Vector2(-5, 2500), 1.0f, m_player));
+            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, m_enemychasertexture, new Vector2(-5, -35), 1.0f, m_player));
+            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, m_enemychasertexture, new Vector2(3550, -35), 1.0f, m_player));
+            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, m_enemychasertexture, new Vector2(3550, 2500), 1.0f, m_player));
+            m_enemyspawners.Add(new EnemySpawner(m_enemytexture, m_enemychasertexture, new Vector2(-5, 2500), 1.0f, m_player));
 
             foreach(EnemySpawner enemySpawner in m_enemyspawners)
             {
@@ -103,16 +115,23 @@ namespace ShootyGame
 
         public override void LoadContent(ContentManager Content)
         {
+            m_parallaxtexture = Content.Load<Texture2D>("ParallaxBackground");
+            m_parallaxtexture1 = Content.Load<Texture2D>("Parallax1");
+            m_parallaxtexture2 = Content.Load<Texture2D>("Parallax2");
+            m_parallaxtexture3 = Content.Load<Texture2D>("Parallax3");
+
+
             font = Content.Load<SpriteFont>("DefaultFont");
             m_enemytexture = Content.Load<Texture2D>("Meteor");
             m_bulletTexture = Content.Load<Texture2D>("BulletAnimated");
             m_playertexture = Content.Load<Texture2D>("killme");
             m_cursorTexture = Content.Load<Texture2D>("Cursorposition");
             m_lifeTexture = Content.Load<Texture2D>("Life");
-
+            m_enemychasertexture = Content.Load<Texture2D>("ChaserEnemy");
             m_background = Content.Load<Texture2D>("Background");
-            m_bordertexture = Content.Load<Texture2D>("Border2");
+            m_bordertexture = Content.Load<Texture2D>("Border");
             m_deathparticletexture = Content.Load<Texture2D>("Explosion");
+     
         }
 
         public override void UnloadContent()
@@ -133,7 +152,13 @@ namespace ShootyGame
             m_player.Update(gameTime);
             m_camera.UpdateCamera(GetViewport);
 
-            
+            foreach (ParallaxBackground background in m_parallaxBackgrounds)
+            {
+                background.Update(gameTime, GetViewport, m_player.GetPlayerDirection());
+            }
+          
+
+
 
             for (int i = 0; i < m_deathparticles.Count; i++)
             {
@@ -143,6 +168,7 @@ namespace ShootyGame
             }
 
 
+            
             foreach (EnemySpawner enemyspawner in m_enemyspawners)
             {
                 enemyspawner.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
@@ -276,19 +302,28 @@ namespace ShootyGame
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _graphicsDevice.Clear(Color.Black);
+            _graphicsDevice.Clear(new Color(01,14,35));
+         
+
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null);
+
+            foreach (ParallaxBackground background in m_parallaxBackgrounds)
+            {
+                background.Draw(spriteBatch);
+            }
+            spriteBatch.End();
+
+
+
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, m_camera.Transform);
 
-            spriteBatch.Draw(m_background, new Rectangle(0, 0, m_background.Width, m_background.Height), Color.White);
+            //spriteBatch.Draw(m_background, new Rectangle(0, 0, m_background.Width, m_background.Height), Color.White);
+            //spriteBatch.Draw(m_parallaxtexture, new Rectangle(200, 0, m_parallaxtexture.Width, m_parallaxtexture.Height), Color.White);
             m_border.Draw(spriteBatch);
-
-          
 
             spriteBatch.End();
 
 
- 
-          
 
             quadtree.Childrenof(quadtree, QuadList);
 
@@ -312,7 +347,11 @@ namespace ShootyGame
 
             spriteBatch.DrawString(font, "Player score:" + m_player.GetPlayerScore().ToString(), new Vector2(0, 100), Color.White);
             spriteBatch.DrawString(font, "Pawns:" + m_totalobjects.Count.ToString(), new Vector2(0, 120), Color.White);
-            spriteBatch.DrawString(font, "Player rotation:" + m_player.m_playerrotation.ToString(), new Vector2(0, 140), Color.White); 
+            spriteBatch.DrawString(font, "Player rotation:" + m_player.m_playerrotation.ToString(), new Vector2(0, 140), Color.White);
+            spriteBatch.DrawString(font, "Player Direction:" + m_player.GetPlayerDirection().ToString(), new Vector2(0, 160), Color.White);
+            spriteBatch.DrawString(font, "Zoom amount:" + m_camera.Zoom.ToString(), new Vector2(0, 180), Color.White);
+
+
             spriteBatch.End();
 
             m_player.Draw(spriteBatch, m_camera.Transform);

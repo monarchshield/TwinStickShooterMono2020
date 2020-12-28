@@ -28,7 +28,7 @@ namespace ShootyGame
         public Camera(Viewport viewport)
         {
             Bounds = viewport.Bounds;
-            Zoom = 1f;
+            Zoom = .5f;
             Position = Vector2.Zero;
         }
 
@@ -36,7 +36,7 @@ namespace ShootyGame
         {
             Bounds = viewport.Bounds;
             m_playerref = playerRef;
-            Zoom = 1f;
+            Zoom = .5f;
             Position = Vector2.Zero;
         }
 
@@ -150,13 +150,13 @@ namespace ShootyGame
 
             if (currentMouseWheelValue > previousMouseWheelValue)
             {
-                AdjustZoom(.05f);
+                //AdjustZoom(.05f);
                 Console.WriteLine(moveSpeed);
             }
 
             if (currentMouseWheelValue < previousMouseWheelValue)
             {
-                AdjustZoom(-.05f);
+                //AdjustZoom(-.05f);
                 Console.WriteLine(moveSpeed);
             }
 

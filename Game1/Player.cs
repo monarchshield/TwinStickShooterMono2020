@@ -65,7 +65,7 @@ namespace ShootyGame
             m_mouseposition = Vector2.Zero;
             m_bullets = new List<Bullet>();
             m_lives = lives;
-            m_speed = 150;
+            m_speed = 250;
 
             m_shootcooldown = .25f;
             m_currentshootcooldown = 0f;
@@ -239,7 +239,10 @@ namespace ShootyGame
 
         public void Move(float deltatime)
         {
-            if(keyboardstate.IsKeyDown(Keys.W))
+
+            m_velocity = Vector2.Zero;
+
+            if (keyboardstate.IsKeyDown(Keys.W))
             {
                  m_velocity.Y -= 1;
             }
@@ -263,7 +266,7 @@ namespace ShootyGame
             m_currentposition += m_velocity * m_speed * deltatime ;
 
             //Halt position when not pressing any key
-            m_velocity = Vector2.Zero;
+           
         }
 
         
@@ -271,6 +274,8 @@ namespace ShootyGame
        
         public List<Bullet> GetBullets() { return m_bullets; }
         public int GetPlayerScore() { return m_playerscore; }
+        public Vector2 GetPlayerDirection() { return m_velocity; }
+
 
     }
 }

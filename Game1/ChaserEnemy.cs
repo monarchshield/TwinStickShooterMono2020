@@ -27,11 +27,16 @@ namespace ShootyGame
             m_texture = texture;
             m_currentposition = Position;
             Collision = false;
+            m_playerref = TargetRef;
             SetObjectTag("enemy");
+            m_animationframes = 1;
+            m_alive = true;
+            m_speed = 250.0f;
         }
 
         public override void Update(float _deltaTime)
         {
+            m_dt = _deltaTime;   
             if(m_alive)
             {
                 m_animationtimer += _deltaTime;
