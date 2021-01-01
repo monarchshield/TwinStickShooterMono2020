@@ -48,9 +48,19 @@ namespace ShootyGame
             }
         }
 
+        public bool IsClicked()
+        {
+            if (mousestate.LeftButton == ButtonState.Pressed && m_collision)
+            {
+                return true;
+            }
+
+            else return false;
+        }
+
         public virtual void Update()
         {
-           
+            IsColliding();
         }
 
         public virtual void Draw(SpriteBatch spritebatch)

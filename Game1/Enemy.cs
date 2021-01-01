@@ -63,11 +63,7 @@ namespace ShootyGame
 
         }
 
-        public void SetCameraMatrix(Matrix cam)
-        {
-            m_CameraMatrix = cam;
-        }
-
+     
         public virtual void Update(float _deltaTime)
         {
 

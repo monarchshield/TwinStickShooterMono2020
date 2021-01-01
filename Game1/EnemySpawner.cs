@@ -64,7 +64,7 @@ namespace ShootyGame
             m_chasertexture = chasertexture;
             m_spawnfrequency = SpawnFrequency;
             m_currentspawncooldown = 0.0f;
-            m_maxenemies = 1;
+            m_maxenemies = 25;
             m_player = playerref;
         }
 
@@ -131,7 +131,7 @@ namespace ShootyGame
         public void SpawnEnemy()
         {
             Enemy NewEnemy = new Enemy(m_texture, m_spawnerlocation);
-            NewEnemy.SetCameraMatrix(m_CameraMatrix);
+            
             m_enemylist.Add(NewEnemy);
             m_currentspawncooldown = m_spawnfrequency;
         }
