@@ -317,8 +317,6 @@ namespace ShootyGame
 
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, m_camera.Transform);
 
-            //spriteBatch.Draw(m_background, new Rectangle(0, 0, m_background.Width, m_background.Height), Color.White);
-            //spriteBatch.Draw(m_parallaxtexture, new Rectangle(200, 0, m_parallaxtexture.Width, m_parallaxtexture.Height), Color.White);
             m_border.Draw(spriteBatch);
 
             spriteBatch.End();

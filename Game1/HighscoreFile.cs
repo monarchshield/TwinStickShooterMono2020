@@ -26,7 +26,6 @@ namespace ShootyGame
             m_playerScores = new List<PlayerScore>();
             
             CreateDefaultDocument();
-           
             ReadFile();
         }
 

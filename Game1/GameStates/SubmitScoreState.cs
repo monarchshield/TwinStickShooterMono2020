@@ -13,6 +13,7 @@ namespace ShootyGame
 
         Texture2D m_upbuttonTexture;
         Texture2D m_downbuttonTexture;
+        Texture2D m_submitbuttonTexture;
         SpriteFont m_spritefont;
 
         private List<EnterNameInputButton> m_characterinputs;
@@ -20,12 +21,16 @@ namespace ShootyGame
         GraphicsDevice m_graphics;
         Color m_color;
         string characternamestring;
+        int m_playerscore;
+        Button m_submitscore;
 
+        HighscoreFile SubmitHighscore;
 
-        public SubmitScoreState(GraphicsDevice graphicsDevice)
+        public SubmitScoreState(GraphicsDevice graphicsDevice, int Score)
         : base(graphicsDevice)
         {
             m_graphics = graphicsDevice;
+            m_playerscore = Score;
         }
         public override void Initialize()
         {
@@ -36,6 +41,10 @@ namespace ShootyGame
             m_characterinputs.Add(new EnterNameInputButton(m_upbuttonTexture, m_downbuttonTexture, new Vector2(120, 100), m_spritefont));
             m_characterinputs.Add(new EnterNameInputButton(m_upbuttonTexture, m_downbuttonTexture, new Vector2(180, 100), m_spritefont));
             m_characterinputs.Add(new EnterNameInputButton(m_upbuttonTexture, m_downbuttonTexture, new Vector2(240, 100), m_spritefont));
+            m_submitscore = new Button(m_submitbuttonTexture, new Vector2(180, 250));
+            SubmitHighscore = new HighscoreFile();
+
+
 
         }
 
@@ -43,6 +52,7 @@ namespace ShootyGame
         {
             m_upbuttonTexture = content.Load<Texture2D>("SelectKey");
             m_downbuttonTexture = content.Load<Texture2D>("SelectKeyDown");
+            m_submitbuttonTexture = content.Load<Texture2D>("SubmitScoreButton");
             m_spritefont = content.Load<SpriteFont>("DefaultFont");
         }
 
@@ -59,6 +69,16 @@ namespace ShootyGame
             foreach (EnterNameInputButton obj in m_characterinputs)
             {
                 obj.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            }
+
+            m_submitscore.Update();
+
+            if (m_submitscore.IsClicked())
+            {
+                Console.WriteLine("Amazing");
+                SubmitHighscore.WritetoFile(m_playerscore, characternamestring);
+                GameStateManager.Instance.ChangeScreen(new HighscoreState(m_graphics));
+
             }
 
             /*
@@ -89,6 +109,8 @@ namespace ShootyGame
                 characternamestring += obj.GetInputCharacter();
                
             }
+
+            m_submitscore.Draw(spriteBatch);
 
             spriteBatch.DrawString(m_spritefont, "Player Name:" + characternamestring.ToString(), new Vector2(0, 0), Color.White);
 
