@@ -181,7 +181,7 @@ namespace ShootyGame
             foreach (Bullet bulletobj in m_bullets)
             {
                 bulletobj.Draw(spritebatch);
-                bulletobj.DrawInfo(spritebatch, m_debugfont);
+                //bulletobj.DrawInfo(spritebatch, m_debugfont);
             }
             
 
@@ -276,6 +276,6 @@ namespace ShootyGame
         public int GetPlayerScore() { return m_playerscore; }
         public Vector2 GetPlayerDirection() { return m_velocity; }
 
-
+        public int GetPlayerLifes() { return m_lives; }
     }
 }

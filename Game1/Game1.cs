@@ -46,8 +46,8 @@ namespace ShootyGame
             GameStateManager.Instance.SetContent(Content);
 
 
-            GameStateManager.Instance.AddScreen(new SubmitScoreState(GraphicsDevice,2000));
-            //GameStateManager.Instance.AddScreen(new ShootyGameState(GraphicsDevice));
+            //GameStateManager.Instance.AddScreen(new SubmitScoreState(GraphicsDevice,2000));
+            GameStateManager.Instance.AddScreen(new MainMenuState(GraphicsDevice));
 
 
 

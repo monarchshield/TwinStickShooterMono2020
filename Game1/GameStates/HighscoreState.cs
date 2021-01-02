@@ -20,6 +20,10 @@ namespace ShootyGame
         HighscoreFile m_highscorefile;
         SpriteFont m_spritefont;
 
+        int m_HighscoreCount;
+        float renderpositionx;
+
+
         public HighscoreState(GraphicsDevice graphicsDevice)
         : base(graphicsDevice)
         {
@@ -27,10 +31,16 @@ namespace ShootyGame
         }
         public override void Initialize()
         {
+
+            renderpositionx = 50;
             m_color = Color.Black;
-            m_backButton = new MenuButton(m_backbtnsprite, new Vector2(50, 300), MenuButton.MenuNav.MAINMENU, m_graphics);
+            m_backButton = new MenuButton(m_backbtnsprite, new Vector2(0, 400), MenuButton.MenuNav.MAINMENU, m_graphics);
             m_highscorefile = new HighscoreFile();
             m_highscorefile.SortHighScores();
+           
+            m_HighscoreCount = m_highscorefile.m_playerScores.Count();
+            if(m_HighscoreCount > 10) { m_HighscoreCount = 10; }
+           
 
         }
 
@@ -56,11 +66,27 @@ namespace ShootyGame
             spriteBatch.Begin();
             // Draw sprites here
 
-          
+            int textleft = 0;
+            int textright = 0;
 
-            for (int i = 0; i < m_highscorefile.m_playerScores.Count; i++)
+            for (int i = 0; i < m_HighscoreCount; i++)
             {
-                spriteBatch.DrawString(m_spritefont, i.ToString() + ")" + m_highscorefile.m_playerScores[i].name + ":" + m_highscorefile.m_playerScores[i].scorevalue, new Vector2(50, 60 + i * 30), Color.White);
+
+                if(i < 5)
+                {
+                    renderpositionx = 200;
+                    spriteBatch.DrawString(m_spritefont, i.ToString() + ")" + m_highscorefile.m_playerScores[i].name + ":" + m_highscorefile.m_playerScores[i].scorevalue, new Vector2(renderpositionx, 60 + textleft * 30), Color.White);
+                    textleft += 1;
+                }
+
+                else
+                {
+                    renderpositionx = 400;
+                    spriteBatch.DrawString(m_spritefont, i.ToString() + ")" + m_highscorefile.m_playerScores[i].name + ":" + m_highscorefile.m_playerScores[i].scorevalue, new Vector2(renderpositionx, 60 + textright * 30), Color.White);
+                    textright += 1;
+                }
+                
+
             }
 
            

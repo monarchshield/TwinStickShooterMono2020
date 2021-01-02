@@ -38,10 +38,10 @@ namespace ShootyGame
             characternamestring = "";
 
             m_characterinputs = new List<EnterNameInputButton>();
-            m_characterinputs.Add(new EnterNameInputButton(m_upbuttonTexture, m_downbuttonTexture, new Vector2(120, 100), m_spritefont));
-            m_characterinputs.Add(new EnterNameInputButton(m_upbuttonTexture, m_downbuttonTexture, new Vector2(180, 100), m_spritefont));
-            m_characterinputs.Add(new EnterNameInputButton(m_upbuttonTexture, m_downbuttonTexture, new Vector2(240, 100), m_spritefont));
-            m_submitscore = new Button(m_submitbuttonTexture, new Vector2(180, 250));
+            m_characterinputs.Add(new EnterNameInputButton(m_upbuttonTexture, m_downbuttonTexture, new Vector2(290, 200), m_spritefont));
+            m_characterinputs.Add(new EnterNameInputButton(m_upbuttonTexture, m_downbuttonTexture, new Vector2(350, 200), m_spritefont));
+            m_characterinputs.Add(new EnterNameInputButton(m_upbuttonTexture, m_downbuttonTexture, new Vector2(410, 200), m_spritefont));
+            m_submitscore = new Button(m_submitbuttonTexture, new Vector2(260, 330));
             SubmitHighscore = new HighscoreFile();
 
 
@@ -112,8 +112,8 @@ namespace ShootyGame
 
             m_submitscore.Draw(spriteBatch);
 
-            spriteBatch.DrawString(m_spritefont, "Player Name:" + characternamestring.ToString(), new Vector2(0, 0), Color.White);
-
+            spriteBatch.DrawString(m_spritefont, "Player Name:" + characternamestring.ToString(), new Vector2(300, 20), Color.White);
+            spriteBatch.DrawString(m_spritefont, "Player Score:" + m_playerscore.ToString(), new Vector2(300, 40), Color.White);
 
             spriteBatch.End();
 

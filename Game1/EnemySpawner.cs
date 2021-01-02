@@ -78,7 +78,7 @@ namespace ShootyGame
         /// </summary>
         public void Update(float _deltatime)
         {
-
+            UpdateEnemyMaxSpawn();
             SpawnEnemy(_deltatime);
 
             for (int i = 0; i < m_enemylist.Count; i++)
@@ -150,17 +150,68 @@ namespace ShootyGame
            
             if(m_currentspawncooldown < 0 && m_enemylist.Count <= m_maxenemies)
             {
-                //ChaserEnemy NewEnemy = new ChaserEnemy(m_chasertexture, m_spawnerlocation ,m_player);
-                //NewEnemy.SetCameraMatrix(m_CameraMatrix);
 
-                Enemy NewEnemy = new Enemy(m_texture, m_spawnerlocation);
-                //NewEnemy.SetCameraMatrix(m_CameraMatrix);
+                if (IsMultipleOf(m_enemylist.Count, 3) && m_player.GetPlayerScore() > 400)
+                { 
+                    ChaserEnemy NewEnemy = new ChaserEnemy(m_chasertexture, m_spawnerlocation, m_player); 
+                    m_enemylist.Add(NewEnemy); 
+                }
 
-                m_enemylist.Add(NewEnemy);
+               
+
+                else 
+                { 
+                    Enemy NewEnemy = new Enemy(m_texture, m_spawnerlocation); 
+                    m_enemylist.Add(NewEnemy); 
+                }
+                
+
+              
                 m_currentspawncooldown = m_spawnfrequency;
             }
         }
 
+        private bool IsMultipleOf(int n, int mulitpleindex)
+        {
+            while (n > 0)
+                n = n - mulitpleindex;
+
+            if (n == 0)
+                return true;
+
+            return false;
+        }
+
+
+        public void UpdateEnemyMaxSpawn()
+        {
+
+            switch (m_player.GetPlayerScore())
+            {
+
+                case int i when i > 250 && i < 400:
+                    m_maxenemies = 10;
+                 break;
+
+
+                case int i when i > 400 && i < 500:
+                    m_maxenemies = 20;
+                    break;
+
+                case int i when i > 500 && i < 600: 
+                    m_maxenemies = 25;
+                    break;
+
+                case int i when i > 600:
+                    m_maxenemies = 40;
+                    break;
+
+                default:
+                    m_maxenemies = 5;
+                    break;
+            }
+
+        }
 
       
         public float GetSpawnCooldown() { return m_currentspawncooldown; }
