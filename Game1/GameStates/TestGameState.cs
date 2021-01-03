@@ -14,6 +14,11 @@ namespace ShootyGame
         GraphicsDevice m_graphics;
         Color m_color;
 
+        Texture2D Joystickradial;
+        Texture2D Joystickthumbnail;
+        SpriteFont font;
+
+        VirtualJoystick JoystickTest;
 
         public TestGameState(GraphicsDevice graphicsDevice)
         : base(graphicsDevice)
@@ -24,11 +29,15 @@ namespace ShootyGame
         {
             m_color = Color.Black;
 
+            JoystickTest = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(100, 300));
+
         }
 
         public override void LoadContent(ContentManager content)
         {
-
+            font = content.Load<SpriteFont>("DefaultFont");
+            Joystickradial = content.Load<Texture2D>("JoystickRadial");
+            Joystickthumbnail = content.Load<Texture2D>("JoystickThumb");
 
         }
 
@@ -41,17 +50,8 @@ namespace ShootyGame
 
             timepassed += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if(timepassed > 3)
-            {
-                m_color = Color.SkyBlue;
-                
-            }
-
-
-            if(timepassed > 6)
-            {
-                GameStateManager.Instance.ChangeScreen(new TestGameState(m_graphics));
-            }
+            JoystickTest.Update();
+         
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -59,6 +59,10 @@ namespace ShootyGame
             _graphicsDevice.Clear(m_color);
             spriteBatch.Begin();
             // Draw sprites here
+            spriteBatch.DrawString(font, "JoyStick Direction:" + JoystickTest.GetJoystickDirection().ToString(), new Vector2(0, 60), Color.White);
+
+            JoystickTest.Draw(spriteBatch);
+
             spriteBatch.End();
 
         }

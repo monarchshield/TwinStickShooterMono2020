@@ -1,34 +1,29 @@
-﻿using System;
-using System.ComponentModel;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 
-namespace ShootyGame
+
+
+namespace AndroidShootyGame
 {
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        
+       
 
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
-           
-            
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
 
         protected override void Initialize()
         {
-
-            _graphics.PreferredBackBufferWidth = 800;  // set this value to the desired width of your window
-            _graphics.PreferredBackBufferHeight = 480;   // set this value to the desired height of your window
-            _graphics.ApplyChanges();
+            // TODO: Add your initialization logic here
 
             base.Initialize();
         }
@@ -37,21 +32,7 @@ namespace ShootyGame
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            
-
-
-            ///<Summary>
-            ///To add more content to the game you just type mgcb-editor in command prompt * *
-            ///</Summary>
-            GameStateManager.Instance.SetContent(Content);
-
-
-            GameStateManager.Instance.AddScreen(new TestGameState(GraphicsDevice));
-           // GameStateManager.Instance.AddScreen(new MainMenuState(GraphicsDevice));
-
-
-
-
+            // TODO: use this.Content to load your game content here
         }
 
         protected override void Update(GameTime gameTime)
@@ -59,8 +40,8 @@ namespace ShootyGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            // TODO: Add your update logic here
 
-            GameStateManager.Instance.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -68,7 +49,8 @@ namespace ShootyGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            GameStateManager.Instance.Draw(_spriteBatch);
+            // TODO: Add your drawing code here
+
             base.Draw(gameTime);
         }
     }
