@@ -10,7 +10,7 @@ namespace ShootyGame
 {
     class VirtualJoystick
     {
-        //Commiting comments
+        //Testing commit comments
         protected Texture2D m_joystickradial; //This is the underlying texture for the joystick
         protected Texture2D m_joystickthumbnail; //The thumbnail that will be used to control the joystick
         
