@@ -22,9 +22,9 @@ namespace ShootyGame
         protected MouseState m_mousestate; //The mouse state for desktop testing purposes.
         //protected float m_joystickdistance; //Joystick distance from the radial.
 
-        protected bool isHovering;
-        protected bool isDragging;
-        protected Color m_color;
+        protected bool isHovering; //Is mousepoint or touchpoint hovering over cursor?
+        protected bool isDragging; //Is the element being dragged
+        protected Color m_color; //Used for debugging to see if the elements are being triggered as expected.
 
 
         public VirtualJoystick() { /*Default constructor */}
