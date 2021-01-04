@@ -20,8 +20,8 @@ namespace AndroidShootyGame
 
 
         Viewport viewport;
-        VirtualJoystick JoystickTest;
-
+        VirtualJoystick JoystickLeft;
+        VirtualJoystick JoystickRight;
         Matrix scaleMatrix;
 
 
@@ -47,16 +47,12 @@ namespace AndroidShootyGame
 
             viewport = _graphics.GraphicsDevice.Viewport;
 
-            if(viewport.Width > viewport.Height)
-            {
-                scaleMatrix = Matrix.CreateScale(viewport.Width / 800, viewport.Height / 480, 1.0f);
-            }
-            else
-            {
-                scaleMatrix = Matrix.CreateScale(viewport.Width / 480, viewport.Height / 800, 1.0f);
-            }
-            JoystickTest = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(100, 300));
-
+          
+             scaleMatrix = Matrix.CreateScale(viewport.Width / 800, viewport.Height / 480, 1.0f);
+            
+          
+            JoystickLeft = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(100, 400));
+            JoystickRight = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(700, 400));
 
             base.Initialize();
         }
@@ -80,7 +76,8 @@ namespace AndroidShootyGame
             touchcollection = TouchPanel.GetState();
 
             // TODO: Add your update logic here
-            JoystickTest.Update();
+            JoystickLeft.Update();
+            JoystickRight.Update();
             base.Update(gameTime);
         }
 
@@ -104,7 +101,8 @@ namespace AndroidShootyGame
             
 
             _spriteBatch.DrawString(font, "Tapping point:", new Vector2(0, 0), Color.White);
-            JoystickTest.Draw(_spriteBatch);
+            JoystickLeft.Draw(_spriteBatch);
+            JoystickRight.Draw(_spriteBatch);
 
             _spriteBatch.End();
 
