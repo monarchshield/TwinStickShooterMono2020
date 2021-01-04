@@ -49,10 +49,13 @@ namespace AndroidShootyGame
 
           
              scaleMatrix = Matrix.CreateScale(viewport.Width / 800, viewport.Height / 480, 1.0f);
+            TouchPanel.DisplayWidth = 800;
+            TouchPanel.DisplayHeight = 480;
+            TouchPanel.EnableMouseTouchPoint = true;
             
-          
+            
             JoystickLeft = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(100, 400));
-            JoystickRight = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(700, 400));
+            JoystickRight = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(750, 400));
 
             base.Initialize();
         }
@@ -74,6 +77,8 @@ namespace AndroidShootyGame
                 Exit();
 
             touchcollection = TouchPanel.GetState();
+            TouchPanel.DisplayWidth = 875;
+            TouchPanel.DisplayHeight = 480;
 
             // TODO: Add your update logic here
             JoystickLeft.Update();
@@ -91,14 +96,19 @@ namespace AndroidShootyGame
             int touchpointdata = 0;
             foreach (TouchLocation tl in touchcollection)
             {
-                
 
+               //Matrix PointWorldLocation =  Matrix.CreateScale(tl.Position.X / 800, tl.Position.Y / 480, 1.0f);
+               
+
+           
                 _spriteBatch.DrawString(font, "Tapping point:" + tl.Position.ToString(), new Vector2(0, 0 + touchpointdata * 20), Color.White);
                 touchpointdata++;
 
 
             }
-            
+
+            _spriteBatch.DrawString(font, "Joystick Left:" + JoystickLeft.GetJoystickDirection().ToString() , new Vector2(0, 60), Color.White);
+            _spriteBatch.DrawString(font, "Joystick Right:" + JoystickRight.GetJoystickDirection().ToString(), new Vector2(0, 80), Color.White);
 
             _spriteBatch.DrawString(font, "Tapping point:", new Vector2(0, 0), Color.White);
             JoystickLeft.Draw(_spriteBatch);

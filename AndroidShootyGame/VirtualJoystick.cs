@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+using Microsoft.Xna.Framework.Input.Touch;
 
 namespace AndroidShootyGame
 {
@@ -27,6 +27,9 @@ namespace AndroidShootyGame
         protected Color m_color; //Used for debugging to see if the elements are being triggered as expected.
 
 
+        protected TouchCollection touchcollection;
+        protected int TouchId;
+
         public VirtualJoystick() { /*Default constructor */}
 
         public VirtualJoystick(Texture2D joystickradial, Texture2D joystickthumb, Vector2 pos)
@@ -38,7 +41,7 @@ namespace AndroidShootyGame
             //m_joystickposition = new Vector2(pos.X + joystickradial.Width / 2, pos.Y + joystickradial.Height / 2); //This is the initial default position so half by half.
             m_joystickcenter = new Vector2(pos.X - m_joystickthumbnail.Width / 2, pos.Y - m_joystickthumbnail.Height / 2);
             m_joystickposition = m_joystickcenter;
-
+            TouchId = -1;
 
             m_color = Color.White;
         }
@@ -46,6 +49,7 @@ namespace AndroidShootyGame
 
         public void Update()
         {
+            touchcollection = TouchPanel.GetState();
             IsColliding();
             MoveThumbnail();
             ClampThumbStickLength();
@@ -66,11 +70,32 @@ namespace AndroidShootyGame
         {
             m_mousestate = Mouse.GetState();
 
-            Vector2 mousepositionpoint = new Vector2(m_mousestate.Position.X, m_mousestate.Position.Y);
-            float LengthProduct = (mousepositionpoint - m_position).Length();
+
+            for (int i = 0; i < touchcollection.Count; i++)
+            {
+
+                float LengthProduct = (touchcollection[i].Position - m_position).Length();
+
+                if (LengthProduct < m_joystickradial.Width)
+                {
+                    m_color = Color.Red;
+                    isHovering = true;
+
+                    TouchId = i;
+                    return isHovering;
+
+                }
+
+
+
+            }
+
+            //Vector2 mousepositionpoint = new Vector2(m_mousestate.Position.X, m_mousestate.Position.Y);
+            //float LengthProduct = (mousepositionpoint - m_position).Length();
 
 
             //Change the joystick radial length product radius later.
+            /*
             if (LengthProduct < m_joystickradial.Width)
             {
                 m_color = Color.Red;
@@ -78,8 +103,9 @@ namespace AndroidShootyGame
 
                 return isHovering;
                 
-            }
+            }*/
 
+            TouchId = -1;
             m_color = Color.White;
             isHovering = false;
             return isHovering;
@@ -90,12 +116,13 @@ namespace AndroidShootyGame
         {
 
             m_joystickposition = new Vector2(m_position.X + m_joystickradial.Width / 2, m_position.Y + m_joystickradial.Height / 2);
-            if (m_mousestate.LeftButton == ButtonState.Released) { isDragging = false; }
-            if (m_mousestate.LeftButton == ButtonState.Pressed && isHovering || isDragging)
+            if (TouchId.Equals(-1)) { isDragging = false; }
+            if (!TouchId.Equals(-1) && isHovering || isDragging)
             {
                 
-                m_joystickposition = new Vector2(m_mousestate.Position.X, m_mousestate.Position.Y);
-                
+                //m_joystickposition = new Vector2(m_mousestate.Position.X, m_mousestate.Position.Y);
+
+                m_joystickposition = touchcollection[TouchId].Position;
                 isDragging = true;
             }
 
