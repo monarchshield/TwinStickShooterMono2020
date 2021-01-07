@@ -178,7 +178,7 @@ namespace AndroidShootyGame
 
             foreach (ParallaxBackground background in m_parallaxBackgrounds)
             {
-                background.Update(gameTime, GetViewport, m_player.GetPlayerDirection());
+                background.Update(gameTime, GetViewport, JoystickLeft.GetJoystickDirection());
             }
           
 

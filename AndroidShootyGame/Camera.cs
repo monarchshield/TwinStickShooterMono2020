@@ -17,7 +17,7 @@ namespace AndroidShootyGame
         public Rectangle VisibleArea { get; protected set; }
         public Matrix Transform { get; protected set; }
 
-       
+        public Matrix Mobileresolution;
 
 
         private float currentMouseWheelValue, previousMouseWheelValue, zoom, previousZoom;
@@ -38,9 +38,12 @@ namespace AndroidShootyGame
             m_playerref = playerRef;
             Zoom = .5f;
             Position = Vector2.Zero;
+
+            Mobileresolution = Matrix.CreateScale(viewport.Width / 800, viewport.Height / 480, 1.0f);
+
         }
 
-        
+
 
 
         /// <summary>
@@ -71,9 +74,12 @@ namespace AndroidShootyGame
         private void UpdateMatrix()
         {
             Transform = Matrix.CreateTranslation(new Vector3(-Position.X, -Position.Y, 0))
-                * Matrix.CreateScale(Zoom) 
+                * Matrix.CreateScale(Zoom) *
+                Mobileresolution
                 * Matrix.CreateTranslation(new Vector3(Bounds.Width * 0.5f, Bounds.Height * 0.5f, 0)); 
                 UpdateVisibleArea();
+
+            
         }
 
         /// <summary>

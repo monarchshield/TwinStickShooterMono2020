@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace AndroidShootyGame
 {
+
     [Activity(
         Label = "@string/app_name",
         MainLauncher = true,

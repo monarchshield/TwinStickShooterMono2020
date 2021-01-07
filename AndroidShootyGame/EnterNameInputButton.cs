@@ -34,6 +34,10 @@ namespace AndroidShootyGame
 
             m_UpButton = new Button(buttontextureup, new Vector2(Position.X, Position.Y - 50));
             m_DownButton = new Button(buttontexturedown, new Vector2(Position.X, Position.Y + 50));
+
+            m_UpButton.SetPointSize(buttontextureup.Width);
+            m_DownButton.SetPointSize(buttontexturedown.Width);
+
             m_buttoncooldown = .15f;
             m_currentbuttoncooldown = 0f;
 
@@ -45,7 +49,7 @@ namespace AndroidShootyGame
             m_UpButton.Update();
             m_DownButton.Update();
 
-            if(m_UpButton.IsClicked() && m_currentbuttoncooldown < 0)
+            if(m_UpButton.IsColliding() && m_currentbuttoncooldown < 0)
             {
                 m_currentbuttoncooldown = m_buttoncooldown;
                 m_CharacterIndex += 1;
@@ -53,7 +57,7 @@ namespace AndroidShootyGame
                 if(m_CharacterIndex > 25) { m_CharacterIndex = 0; }
             }
 
-            if(m_DownButton.IsClicked() && m_currentbuttoncooldown < 0)
+            if(m_DownButton.IsColliding() && m_currentbuttoncooldown < 0)
             {
                 m_currentbuttoncooldown = m_buttoncooldown;
                 m_CharacterIndex -= 1;

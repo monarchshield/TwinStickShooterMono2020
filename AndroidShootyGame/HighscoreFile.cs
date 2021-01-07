@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Linq;
 
+
 namespace AndroidShootyGame
 {
     public struct PlayerScore
@@ -40,12 +41,17 @@ namespace AndroidShootyGame
 
         public void CreateDefaultDocument()
         {
+            
+          
 
             if (!File.Exists("Highscores.xml"))
             {
+
+                string location = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+                location += "/Highscores.xml";
                 XmlNode RootNode = HighscoreDocument.CreateElement("Highscores");
                 HighscoreDocument.AppendChild(RootNode);
-
+                
                 //Score is the element, Value is the points, Inner text is the name
                 XmlNode ScoreNode = HighscoreDocument.CreateElement("Score");
                 XmlAttribute ScoreValue = HighscoreDocument.CreateAttribute("Value");
@@ -54,7 +60,7 @@ namespace AndroidShootyGame
                 ScoreNode.InnerText = "UserName";
                 RootNode.AppendChild(ScoreNode);
 
-                HighscoreDocument.Save("Highscores.xml");
+                HighscoreDocument.Save(location);
             }
         }
 
@@ -67,7 +73,10 @@ namespace AndroidShootyGame
         /// </summary>
         public void ReadFile()
         {
-            HighscoreDocument.Load("Highscores.xml");
+            string location = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            location += "/Highscores.xml";
+
+            HighscoreDocument.Load(location);
             XmlNodeList Scorenodes = HighscoreDocument.SelectNodes("//Highscores/Score");
             m_playerScores.Clear();
 
@@ -89,7 +98,10 @@ namespace AndroidShootyGame
         /// <param name="name"></param>
         public void WritetoFile(int score, string name) 
         {
-            HighscoreDocument.Load("Highscores.xml");
+
+            string location = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            location += "/Highscores.xml";
+            HighscoreDocument.Load(location);
 
             XmlNode root = HighscoreDocument.DocumentElement;
 
@@ -101,7 +113,7 @@ namespace AndroidShootyGame
             ScoreNode.InnerText = name;
             root.AppendChild(ScoreNode);
 
-            HighscoreDocument.Save("Highscores.xml");
+            HighscoreDocument.Save(location);
 
 
            

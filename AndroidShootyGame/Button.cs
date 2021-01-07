@@ -33,6 +33,11 @@ namespace AndroidShootyGame
             m_color = Color.White;
         }
 
+        public void SetPointSize(int value)
+        {
+            CollisionPoint = new Point(value, value);
+        }
+
         public bool IsColliding()
         {
             touchcollection = TouchPanel.GetState();

@@ -60,7 +60,7 @@ namespace AndroidShootyGame
 
             GameStateManager.Instance.SetContent(Content);
 
-            GameStateManager.Instance.AddScreen(new MainMenuState(GraphicsDevice));
+            GameStateManager.Instance.AddScreen(new SubmitScoreState(GraphicsDevice,1500));
             //GameStateManager.Instance.AddScreen(new TestGameState(GraphicsDevice));
 
 
