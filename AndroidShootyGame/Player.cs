@@ -112,8 +112,8 @@ namespace AndroidShootyGame
 
             if(!ShootDirection.Equals(Vector2.Zero))
             {
-                Vector2 Direction = m_currentposition + ShootDirection;
-                m_playerrotation = (float)Math.Atan2(Direction.Y, Direction.X);
+                //Vector2 Direction = m_currentposition + ShootDirection;
+                m_playerrotation = (float)Math.Atan2(ShootDirection.Y, ShootDirection.X);
                 m_playerrotation -= .45f;
             }
             
