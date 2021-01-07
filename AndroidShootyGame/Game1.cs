@@ -11,43 +11,35 @@ namespace AndroidShootyGame
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        public static  Matrix m_scaleMatrix;
 
-        Texture2D Joystickradial;
-        Texture2D Joystickthumbnail;
-        SpriteFont font;
-
-        TouchCollection touchcollection;
-
-
-        Viewport viewport;
-        VirtualJoystick JoystickLeft;
-        VirtualJoystick JoystickRight;
-        Matrix scaleMatrix;
 
 
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
 
-            _graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+        
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            _graphics.ApplyChanges();
-         
+
+          
+            
 
             //_graphics.GraphicsDevice.Viewport.Width;
         }
 
-        
+
 
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            LoadContent();
+           
 
+            /*
             viewport = _graphics.GraphicsDevice.Viewport;
 
-          
+            
              scaleMatrix = Matrix.CreateScale(viewport.Width / 800, viewport.Height / 480, 1.0f);
             TouchPanel.DisplayWidth = 800;
             TouchPanel.DisplayHeight = 480;
@@ -56,19 +48,27 @@ namespace AndroidShootyGame
             
             JoystickLeft = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(100, 400));
             JoystickRight = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(750, 400));
-
+            */
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+           
+            m_scaleMatrix = Matrix.CreateScale(GraphicsDevice.Viewport.Width / 800, GraphicsDevice.Viewport.Height / 480, 1.0f);
 
-          
+            GameStateManager.Instance.SetContent(Content);
+
+            GameStateManager.Instance.AddScreen(new MainMenuState(GraphicsDevice));
+            //GameStateManager.Instance.AddScreen(new TestGameState(GraphicsDevice));
+
+
+            /*
             Joystickradial = Content.Load<Texture2D>("JoystickRadial");
             Joystickthumbnail = Content.Load<Texture2D>("JoystickThumb");
             font = Content.Load<SpriteFont>("DefaultFont");
-            // TODO: use this.Content to load your game content here
+            TODO: use this.Content to load your game content here */
         }
 
         protected override void Update(GameTime gameTime)
@@ -76,13 +76,11 @@ namespace AndroidShootyGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            touchcollection = TouchPanel.GetState();
-            TouchPanel.DisplayWidth = 875;
-            TouchPanel.DisplayHeight = 480;
 
-            // TODO: Add your update logic here
-            JoystickLeft.Update();
-            JoystickRight.Update();
+            TouchPanel.DisplayWidth = 800;
+            TouchPanel.DisplayHeight = 480;
+            GameStateManager.Instance.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -90,9 +88,16 @@ namespace AndroidShootyGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            GameStateManager.Instance.Draw(_spriteBatch);
+
+            #region Test
+            /*
             _spriteBatch.Begin(transformMatrix: scaleMatrix);
             // Draw sprites here
 
+
+            
+           
             int touchpointdata = 0;
             foreach (TouchLocation tl in touchcollection)
             {
@@ -114,8 +119,8 @@ namespace AndroidShootyGame
             JoystickLeft.Draw(_spriteBatch);
             JoystickRight.Draw(_spriteBatch);
 
-            _spriteBatch.End();
-
+            _spriteBatch.End(); */
+            #endregion
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);

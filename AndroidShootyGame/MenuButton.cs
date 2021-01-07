@@ -56,7 +56,7 @@ namespace AndroidShootyGame
 
         public override void Update()
         {
-            if(IsColliding() && mousestate.LeftButton == ButtonState.Pressed)
+            if(IsColliding())
             {
                 
 

@@ -90,20 +90,7 @@ namespace AndroidShootyGame
 
             }
 
-            //Vector2 mousepositionpoint = new Vector2(m_mousestate.Position.X, m_mousestate.Position.Y);
-            //float LengthProduct = (mousepositionpoint - m_position).Length();
-
-
-            //Change the joystick radial length product radius later.
-            /*
-            if (LengthProduct < m_joystickradial.Width)
-            {
-                m_color = Color.Red;
-                isHovering = true;
-
-                return isHovering;
-                
-            }*/
+ 
 
             TouchId = -1;
             m_color = Color.White;

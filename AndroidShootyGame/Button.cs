@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 
 namespace AndroidShootyGame
 {
@@ -12,11 +13,14 @@ namespace AndroidShootyGame
         protected Vector2 m_position;
         protected bool m_collision;
         protected Texture2D m_texture;
-        protected MouseState mousestate;
+     
         protected Rectangle CollisionRect;
         protected Point CollisionPoint;
-        
-        
+
+        protected MouseState mousestate;
+        protected TouchCollection touchcollection;
+        protected int touchpointdata = 0;
+
         protected Color m_color;
         
         public Button() { /* Default constructor */ }
@@ -31,26 +35,37 @@ namespace AndroidShootyGame
 
         public bool IsColliding()
         {
-            mousestate = Mouse.GetState();
+            touchcollection = TouchPanel.GetState();
 
-            if (CollisionRect.Intersects(new Rectangle(mousestate.Position,CollisionPoint)))
+            touchpointdata = 0;
+            foreach (TouchLocation tl in touchcollection)
             {
-                m_color = Color.Red;
-                m_collision = true;
-                return m_collision;
-            }
+                Point point = new Point((int)tl.Position.X, (int)tl.Position.Y);
 
-            else
-            {
-                m_color = Color.White;
-                m_collision = false;
-                return m_collision;
+
+                if (CollisionRect.Intersects(new Rectangle(point, CollisionPoint)))
+                {
+                    
+                    m_color = Color.Red;
+                    m_collision = true;
+                    return m_collision;
+                   
+                }
+                touchpointdata++;
+
             }
+      
+
+             m_color = Color.White;
+             m_collision = false;
+             return m_collision;
+           
+         
         }
 
         public bool IsClicked()
         {
-            if (mousestate.LeftButton == ButtonState.Pressed && m_collision)
+            if (!touchcollection[touchpointdata].Equals(null) && m_collision)
             {
                 return true;
             }

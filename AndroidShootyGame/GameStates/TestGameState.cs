@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input.Touch;
 
 namespace AndroidShootyGame
 {
@@ -13,23 +14,37 @@ namespace AndroidShootyGame
 
         GraphicsDevice m_graphics;
         Color m_color;
-
         Texture2D Joystickradial;
         Texture2D Joystickthumbnail;
         SpriteFont font;
 
-        VirtualJoystick JoystickTest;
+        TouchCollection touchcollection;
+
+
+        Viewport viewport;
+        VirtualJoystick JoystickLeft;
+        VirtualJoystick JoystickRight;
+        Matrix scaleMatrix;
 
         public TestGameState(GraphicsDevice graphicsDevice)
         : base(graphicsDevice)
         {
             m_graphics = graphicsDevice;
+            viewport = graphicsDevice.Viewport;
         }
         public override void Initialize()
         {
             m_color = Color.Black;
 
-            JoystickTest = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(100, 300));
+
+            scaleMatrix = Matrix.CreateScale(viewport.Width / 800, viewport.Height / 480, 1.0f);
+            TouchPanel.DisplayWidth = 800;
+            TouchPanel.DisplayHeight = 480;
+            TouchPanel.EnableMouseTouchPoint = true;
+
+
+            JoystickLeft = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(100, 400));
+            JoystickRight = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(750, 400));
 
         }
 
@@ -50,20 +65,46 @@ namespace AndroidShootyGame
 
             timepassed += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            JoystickTest.Update();
-         
+            touchcollection = TouchPanel.GetState();
+            TouchPanel.DisplayWidth = 875;
+            TouchPanel.DisplayHeight = 480;
+
+            // TODO: Add your update logic here
+            JoystickLeft.Update();
+            JoystickRight.Update();
+
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch _spriteBatch)
         {
             _graphicsDevice.Clear(m_color);
-            spriteBatch.Begin();
+            _spriteBatch.Begin(transformMatrix: scaleMatrix);
             // Draw sprites here
-            spriteBatch.DrawString(font, "JoyStick Direction:" + JoystickTest.GetJoystickDirection().ToString(), new Vector2(0, 60), Color.White);
 
-            JoystickTest.Draw(spriteBatch);
 
-            spriteBatch.End();
+
+            int touchpointdata = 0;
+            foreach (TouchLocation tl in touchcollection)
+            {
+
+                //Matrix PointWorldLocation =  Matrix.CreateScale(tl.Position.X / 800, tl.Position.Y / 480, 1.0f);
+
+
+
+                _spriteBatch.DrawString(font, "Tapping point:" + tl.Position.ToString(), new Vector2(0, 0 + touchpointdata * 20), Color.White);
+                touchpointdata++;
+
+
+            }
+
+            _spriteBatch.DrawString(font, "Joystick Left:" + JoystickLeft.GetJoystickDirection().ToString(), new Vector2(0, 60), Color.White);
+            _spriteBatch.DrawString(font, "Joystick Right:" + JoystickRight.GetJoystickDirection().ToString(), new Vector2(0, 80), Color.White);
+
+            _spriteBatch.DrawString(font, "Tapping point:", new Vector2(0, 0), Color.White);
+            JoystickLeft.Draw(_spriteBatch);
+            JoystickRight.Draw(_spriteBatch);
+
+            _spriteBatch.End();
 
         }
     }
