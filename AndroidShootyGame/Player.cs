@@ -78,6 +78,12 @@ namespace AndroidShootyGame
 
         }
 
+        public void SetMoveDirection(Vector2 Direction) 
+        {
+            m_velocity = Direction;
+        }
+
+
         public void SetFont(SpriteFont font)
         {
             m_debugfont = font;
@@ -95,6 +101,12 @@ namespace AndroidShootyGame
                 m_lives -= 1;
                 m_immunity = m_immunityframes;
             }
+        }
+
+
+        public void Update(GameTime gametime, Vector2 MovementDirection, Vector2 ShootDirection)
+        {
+
         }
 
         public void Update(GameTime gameTime)
@@ -235,6 +247,39 @@ namespace AndroidShootyGame
             }
 
 
+        }
+
+        /// <summary>
+        /// This uses the thumb nail controls to be able to Shoot etc
+        /// </summary>
+        /// <param name="gametime"></param>
+        /// <param name="ShootDirection"></param>
+        public void Shoot(float gametime, Vector2 ShootDirection)
+        {
+            Vector2 TruePosition = Vector2.Transform(ShootDirection + m_currentposition, Matrix.Invert(m_CameraMatrix));
+
+            if (!ShootDirection.Equals(Vector2.Zero) && m_currentshootcooldown <= 0)
+            {
+                m_bullets.Add(new Bullet(m_bulletTexture, m_currentposition, m_bulletdirection, m_playerrotation));
+                m_currentshootcooldown = m_shootcooldown;
+
+            }
+
+            else
+            {
+                m_currentshootcooldown -= gametime;
+            }
+        }
+
+
+        /// <summary>
+        /// This uses the thumb nail controls to be able to move the player etc
+        /// </summary>
+        /// <param name="gametime"></param>
+        /// <param name="ShootDirection"></param>
+        public void Move(float deltatime, Vector2 MoveDirection)
+        {
+            m_currentposition += MoveDirection * m_speed * deltatime;
         }
 
         public void Move(float deltatime)

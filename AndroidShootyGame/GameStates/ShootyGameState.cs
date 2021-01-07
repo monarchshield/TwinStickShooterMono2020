@@ -25,7 +25,8 @@ namespace AndroidShootyGame
         //private int quadtreecollision;
         private List<QuadTree> QuadList;
 
-
+        VirtualJoystick JoystickLeft;
+        VirtualJoystick JoystickRight;
 
         private Player m_player;
         private Camera m_camera;
@@ -49,6 +50,8 @@ namespace AndroidShootyGame
         public Texture2D m_bulletTexture;
         public Texture2D m_cursorTexture;
         public Texture2D m_lifeTexture;
+        Texture2D Joystickradial;
+        Texture2D Joystickthumbnail;
         public SpriteFont font;
 
         public float Distance;
@@ -107,6 +110,8 @@ namespace AndroidShootyGame
                 enemySpawner.SetCameraMatrix(m_camera.Transform);
             }
 
+            JoystickLeft = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(100, 400));
+            JoystickRight = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(750, 400));
 
 
 
@@ -121,11 +126,13 @@ namespace AndroidShootyGame
             m_parallaxtexture2 = Content.Load<Texture2D>("Parallax2");
             m_parallaxtexture3 = Content.Load<Texture2D>("Parallax3");
 
+            Joystickradial = Content.Load<Texture2D>("JoystickRadial");
+            Joystickthumbnail = Content.Load<Texture2D>("JoystickThumb");
 
             font = Content.Load<SpriteFont>("DefaultFont");
             m_enemytexture = Content.Load<Texture2D>("Meteor");
             m_bulletTexture = Content.Load<Texture2D>("BulletAnimated");
-            m_playertexture = Content.Load<Texture2D>("killme");
+            m_playertexture = Content.Load<Texture2D>("Killme");
             m_cursorTexture = Content.Load<Texture2D>("Cursorposition");
             m_lifeTexture = Content.Load<Texture2D>("Life");
             m_enemychasertexture = Content.Load<Texture2D>("ChaserEnemy");
@@ -153,8 +160,11 @@ namespace AndroidShootyGame
             m_player.Update(gameTime);
             m_camera.UpdateCamera(GetViewport);
 
+            JoystickLeft.Update();
+            JoystickRight.Update();
 
-            if(m_player.GetPlayerLifes() < 0)
+
+            if (m_player.GetPlayerLifes() < 0)
             {
               GameStateManager.Instance.ChangeScreen(new SubmitScoreState(_graphics, m_player.GetPlayerScore()));
             }
@@ -312,8 +322,9 @@ namespace AndroidShootyGame
             _graphicsDevice.Clear(new Color(01,14,35));
 
 
+           
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null);
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, transformMatrix: Game1.m_scaleMatrix);
             foreach (ParallaxBackground background in m_parallaxBackgrounds)
             {
                 background.Draw(spriteBatch);
@@ -386,7 +397,11 @@ namespace AndroidShootyGame
 
             spriteBatch.End();
 
-            
+            spriteBatch.Begin(transformMatrix: Game1.m_scaleMatrix);
+                JoystickLeft.Draw(spriteBatch);
+                JoystickRight.Draw(spriteBatch);
+            spriteBatch.End();
+
 
             // quadtree.Draw(spriteBatch, m_camera.Transform);
 
