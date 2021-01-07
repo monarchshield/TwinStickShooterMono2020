@@ -74,7 +74,12 @@ namespace AndroidShootyGame
         }
         public override void Initialize()
         {
+
+            JoystickLeft = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(100, 400));
+            JoystickRight = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(750, 400));
           
+
+
             Distance = 0;
             m_deltatime = 0;
             quadtree = new QuadTree(0, new Rectangle(0, 0, 3508, 2280));
@@ -110,8 +115,7 @@ namespace AndroidShootyGame
                 enemySpawner.SetCameraMatrix(m_camera.Transform);
             }
 
-            JoystickLeft = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(100, 400));
-            JoystickRight = new VirtualJoystick(Joystickradial, Joystickthumbnail, new Vector2(750, 400));
+          
 
 
 
@@ -157,11 +161,14 @@ namespace AndroidShootyGame
 
             // TODO: Add your update logic here
 
-            m_player.Update(gameTime);
-            m_camera.UpdateCamera(GetViewport);
-
             JoystickLeft.Update();
             JoystickRight.Update();
+
+            m_player.Update(gameTime,JoystickLeft.GetJoystickDirection(),JoystickRight.GetJoystickDirection());
+            m_camera.UpdateCamera(GetViewport);
+
+            //JoystickLeft.Update();
+            //JoystickRight.Update();
 
 
             if (m_player.GetPlayerLifes() < 0)

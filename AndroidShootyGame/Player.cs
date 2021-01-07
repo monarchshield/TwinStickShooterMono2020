@@ -106,7 +106,36 @@ namespace AndroidShootyGame
 
         public void Update(GameTime gametime, Vector2 MovementDirection, Vector2 ShootDirection)
         {
+            Shoot((float)gametime.ElapsedGameTime.TotalSeconds,ShootDirection);
+            Move((float)gametime.ElapsedGameTime.TotalSeconds,MovementDirection);
 
+
+            if(!ShootDirection.Equals(Vector2.Zero))
+            {
+                Vector2 Direction = m_currentposition + ShootDirection;
+                m_playerrotation = (float)Math.Atan2(Direction.Y, Direction.X);
+                m_playerrotation -= .45f;
+            }
+            
+
+            
+
+
+            m_immunity -= (float)gametime.ElapsedGameTime.TotalSeconds;
+
+            for (int i = 0; i < m_bullets.Count; i++)
+            {
+                if (m_bullets[i].m_alive)
+                {
+                    m_bullets[i].Update(gametime, m_enemies);
+                }
+
+                else
+                {
+                    if (!m_bullets[i].m_alive) { m_playerscore += 10; }
+                    m_bullets.RemoveAt(i);
+                }
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -197,15 +226,13 @@ namespace AndroidShootyGame
             }
             
 
-            Vector2 Position = new Vector2(mousestate.Position.X, mousestate.Position.Y);
-            Matrix InvertedMatrix = Matrix.Invert(m_CameraMatrix);
-            Vector2 TruePosition = Vector2.Transform(Position, InvertedMatrix);
+         
 
 
 
             //spritebatch.Draw(m_spaceshipTexture, m_currentposition, null, Color.Black, 0, new Vector2(m_spaceshipTexture.Width / 2, m_spaceshipTexture.Height / 2), 5f, SpriteEffects.None, 0);
             spritebatch.Draw(m_spaceshipTexture, m_currentposition, null, Color.White, m_playerrotation + 90, new Vector2(m_spaceshipTexture.Width / 2, m_spaceshipTexture.Height / 2), .5f, SpriteEffects.None, 0);
-            spritebatch.Draw(m_cursorpointer, new Rectangle((int)TruePosition.X - 25, (int)TruePosition.Y - 25, 50, 50), Color.White);
+            //spritebatch.Draw(m_cursorpointer, new Rectangle((int)TruePosition.X - 25, (int)TruePosition.Y - 25, 50, 50), Color.White);
             spritebatch.End();
 
             spritebatch.Begin();
@@ -256,11 +283,12 @@ namespace AndroidShootyGame
         /// <param name="ShootDirection"></param>
         public void Shoot(float gametime, Vector2 ShootDirection)
         {
-            Vector2 TruePosition = Vector2.Transform(ShootDirection + m_currentposition, Matrix.Invert(m_CameraMatrix));
+            
 
+    
             if (!ShootDirection.Equals(Vector2.Zero) && m_currentshootcooldown <= 0)
             {
-                m_bullets.Add(new Bullet(m_bulletTexture, m_currentposition, m_bulletdirection, m_playerrotation));
+                m_bullets.Add(new Bullet(m_bulletTexture, m_currentposition, ShootDirection *-1, m_playerrotation));
                 m_currentshootcooldown = m_shootcooldown;
 
             }
