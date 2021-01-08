@@ -46,8 +46,8 @@ namespace ShootyGame
             GameStateManager.Instance.SetContent(Content);
 
 
-            GameStateManager.Instance.AddScreen(new TestGameState(GraphicsDevice));
-           // GameStateManager.Instance.AddScreen(new MainMenuState(GraphicsDevice));
+            //GameStateManager.Instance.AddScreen(new TestGameState(GraphicsDevice));
+           GameStateManager.Instance.AddScreen(new MainMenuState(GraphicsDevice));
 
 
 

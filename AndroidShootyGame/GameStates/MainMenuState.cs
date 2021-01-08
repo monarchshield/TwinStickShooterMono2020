@@ -21,7 +21,7 @@ namespace AndroidShootyGame
         private MenuButton m_HighscoreButton;
         private MenuButton m_CreditButton;
 
-        private MenuButton m_ExitButton;
+        
 
         private Texture2D m_PlayBtnSprite;
         private Texture2D m_HighscoreBtnSprite;
@@ -44,7 +44,7 @@ namespace AndroidShootyGame
             m_PlayButton = new MenuButton(m_PlayBtnSprite, new Vector2(325, 180), MenuButton.MenuNav.PLAY,m_graphics);
             m_HighscoreButton = new MenuButton(m_HighscoreBtnSprite, new Vector2(325, 250), MenuButton.MenuNav.HIGHSCORE, m_graphics);
             m_CreditButton = new MenuButton(m_CreditBtnSprite, new Vector2(325, 325), MenuButton.MenuNav.CREDITS, m_graphics);
-            m_ExitButton = new MenuButton(m_ExitBtnSprite, new Vector2(325, 400), MenuButton.MenuNav.EXIT, m_graphics);
+        
            }
 
         public override void LoadContent(ContentManager content)
@@ -72,7 +72,7 @@ namespace AndroidShootyGame
             m_HighscoreButton.Update();
          
             m_CreditButton.Update();
-            m_ExitButton.Update();
+         
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -82,12 +82,13 @@ namespace AndroidShootyGame
             spriteBatch.Begin(transformMatrix: Game1.m_scaleMatrix);
             // Draw sprites here
 
+            /*
             for (int i = 0; i < touchcollection.Count; i++)
             {
                 spriteBatch.DrawString(font, "Tapping point:" + touchcollection[i].Position.ToString(), new Vector2(0, 0 + i * 20), Color.White);
 
             }
-
+            */
           
 
 
@@ -96,7 +97,7 @@ namespace AndroidShootyGame
             m_HighscoreButton.Draw(spriteBatch);
           
             m_CreditButton.Draw(spriteBatch);
-            m_ExitButton.Draw(spriteBatch);
+           
 
             spriteBatch.End();
 

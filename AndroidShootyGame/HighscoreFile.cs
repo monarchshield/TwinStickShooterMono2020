@@ -41,14 +41,14 @@ namespace AndroidShootyGame
 
         public void CreateDefaultDocument()
         {
-            
-          
 
-            if (!File.Exists("Highscores.xml"))
+            string location = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            location += "/Highscores.xml";
+
+            if (!File.Exists(location))
             {
 
-                string location = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-                location += "/Highscores.xml";
+               
                 XmlNode RootNode = HighscoreDocument.CreateElement("Highscores");
                 HighscoreDocument.AppendChild(RootNode);
                 

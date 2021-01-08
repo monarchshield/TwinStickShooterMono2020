@@ -63,7 +63,7 @@ namespace AndroidShootyGame
         public override void Draw(SpriteBatch spriteBatch)
         {
             _graphicsDevice.Clear(m_color);
-            spriteBatch.Begin();
+            spriteBatch.Begin(transformMatrix: Game1.m_scaleMatrix);
             // Draw sprites here
 
             int textleft = 0;
